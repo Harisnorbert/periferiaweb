@@ -1,0 +1,41 @@
+.fizetes-oldal {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .fizetes-oldal form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .fizetes-oldal label {
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  .fizetes-oldal input,
+  .fizetes-oldal select {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .fizetes-oldal button {
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .fizetes-oldal button:hover {
+    background-color: darkgreen;
+  }
+  

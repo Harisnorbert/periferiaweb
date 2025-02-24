@@ -1,0 +1,52 @@
+.kosar {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    background-color: #f9f9f9;
+  }
+  
+  .kosar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .kosar li {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .kosar button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .kosar button:hover {
+    background-color: darkred;
+  }
+  
+  .fizetes-gomb {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+  }
+  
+  .fizetes-gomb:hover {
+    background-color: darkgreen;
+  }
+  
