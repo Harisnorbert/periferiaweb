@@ -1,6 +1,6 @@
-import React from 'react';
-import './Kosar.css';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import "./Kosar.css";
+import { useNavigate } from "react-router-dom";
 
 const Kosar = ({ kosar, torlesKosarbol }) => {
   const osszAr = kosar.reduce((osszeg, termek) => osszeg + Number(termek.price || 0), 0);
@@ -23,7 +23,7 @@ const Kosar = ({ kosar, torlesKosarbol }) => {
       )}
       <p><strong>Összesen:</strong> {osszAr} Ft</p>
       {kosar.length > 0 && (
-        <button className="fizetes-gomb" onClick={()=> navigate('/FizetesOldal')}>
+        <button className="fizetes-gomb" onClick={()=> navigate("/FizetesOldal")}>
           Fizetés
         </button>)}
     </div>

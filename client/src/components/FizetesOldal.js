@@ -1,36 +1,67 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './FizetesOldal.css';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./FizetesOldal.css";
+import axios from "axios";
 
-const FizetesOldal = ({ kosar, kosarUrites }) => {
-    const [nev, setNev] = useState('');
-    const [irsz, setIrsz] = useState('');
-    const [varos, setVaros] = useState('');
-    const [utcaHazszam, setUtcaHazszam] = useState('');
-    const [telefon, setTelefon] = useState('');
-    const [email, setEmail] = useState('');
-    const [fizetesiMod, setFizetesiMod] = useState('utanvet');
-    const [kartyaSzam, setKartyaSzam] = useState('');
-    const [lejaratiDatum, setLejaratiDatum] = useState('');
-    const [cvc, setCvc] = useState('');
+const FizetesOldal = ({ kosar, kosarUrites, setFelhasznalo }) => {
+    const [nev, setNev] = useState("");
+    const [irsz, setIrsz] = useState("");
+    const [varos, setVaros] = useState("");
+    const [utcaHazszam, setUtcaHazszam] = useState("");
+    const [telefon, setTelefon] = useState("");
+    const [email, setEmail] = useState("");
+    const [fizetesiMod, setFizetesiMod] = useState("utanvet");
+    const [kartyaSzam, setKartyaSzam] = useState("");
+    const [lejaratiDatum, setLejaratiDatum] = useState("");
+    const [cvc, setCvc] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      axios.get("http://localhost:5000/felhasznalo/profil", { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => {
+          if (res.data) {
+            const { nev, irsz, varos, utcaHazszam, telefon, email } = res.data;
+            setFelhasznalo(res.data);
+            setNev(nev || "");
+            setIrsz(irsz || "");
+            setVaros(varos || "");
+            setUtcaHazszam(utcaHazszam || "");
+            setTelefon(telefon || "");
+            setEmail(email || "");
+          }
+        })
+        .catch((err) => console.error("Hiba a profil betöltésekor:", err));
+    }
+  }, [setFelhasznalo]);
+  
   const osszAr = kosar.reduce((osszeg, termek) => osszeg + (Number(termek.price) || 0), 0);
+
+  useEffect(() => {
+    if (setFelhasznalo) {
+      setNev(setFelhasznalo.nev || '');
+      setIrsz(setFelhasznalo.irsz || '');
+      setVaros(setFelhasznalo.varos || '');
+      setUtcaHazszam(setFelhasznalo.utcaHazszam || '');
+      setTelefon(setFelhasznalo.telefon || '');
+      setEmail(setFelhasznalo.email || '');
+    }
+    }, [setFelhasznalo]);
 
   const kezelRendelest = async (e) => {
     e.preventDefault();
-    if (fizetesiMod === 'bankkártya') {
+    if (fizetesiMod === "bankkártya") {
         if (!kartyaSzam || !lejaratiDatum || !cvc) {
-          alert('Kérlek, töltsd ki a bankkártya adatokat!');
+          alert("Kérlek, töltsd ki a bankkártya adatokat!");
           return;
         }
         if (kartyaSzam.length !== 16 || isNaN(kartyaSzam)) {
-          alert('A kártyaszámnak 16 számjegyből kell állnia!');
+          alert("A kártyaszámnak 16 számjegyből kell állnia!");
           return;
         }
         if (cvc.length !== 3 || isNaN(cvc)) {
-          alert('A CVC-nek 3 számjegyből kell állnia!');
+          alert("A CVC-nek 3 számjegyből kell állnia!");
           return;
         }}
 
@@ -47,17 +78,17 @@ const FizetesOldal = ({ kosar, kosarUrites }) => {
                 kosar: kosar.map((termek) => ({
                   nev: termek.nev,
                   ar: termek.ar,
-                  leiras: termek.leiras || ''
+                  leiras: termek.leiras || ""
                 }))
               };
-            const response = await axios.post('http://localhost:5000/rendeles', rendelesAdatok);
-            console.log('Sikeres rendelés:', response.data);
+            const response = await axios.post("http://localhost:5000/rendeles", rendelesAdatok);
+            console.log("Sikeres rendelés:", response.data);
             alert(`Rendelés sikeresen leadva! Összesen: ${osszAr} Ft`);
             kosarUrites();
-            navigate('/');
+            navigate("/");
           } catch (error) {
-            console.error('Hiba a rendelés leadásakor:', error);
-            alert('Hiba történt a rendelés leadásakor.');
+            console.error("Hiba a rendelés leadásakor:", error);
+            alert("Hiba történt a rendelés leadásakor.");
           }
         };
 
@@ -65,6 +96,7 @@ const FizetesOldal = ({ kosar, kosarUrites }) => {
   
 
         return (
+          
             <div className="fizetes-oldal">
               <h2>Fizetés</h2>
               <form onSubmit={kezelRendelest}>
@@ -100,7 +132,7 @@ const FizetesOldal = ({ kosar, kosarUrites }) => {
                   </select>
                 </label>
         
-                {fizetesiMod === 'bankkártya' && (
+                {fizetesiMod === "bankkártya" && (
                   <div className="kartya-adatok">
                     <h3>Bankkártya adatok</h3>
                     <label>

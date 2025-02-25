@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const termekSchema = new mongoose.Schema({
   name: {
@@ -14,4 +14,4 @@ const termekSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Termek', termekSchema);
+module.exports = mongoose.model("Termek", termekSchema);

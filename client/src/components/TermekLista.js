@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { API_URL } from '../config';
-import './TermekLista.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { API_URL } from "../config";
+import "./TermekLista.css";
 
 const TermekLista = ({ hozzaadKosarhoz }) => {
   const [termekek, setTermekek] = useState([]);
@@ -14,19 +14,19 @@ const TermekLista = ({ hozzaadKosarhoz }) => {
   useEffect(() => {
     axios.get(`${API_URL}/termek`)
       .then((valasz) => {
-        console.log(' Lekérdezett termékek:', valasz.data);
+        console.log(" Lekérdezett termékek:", valasz.data);
         setTermekek(valasz.data);
         setBetolt(false);
       })
       .catch((hiba) => {
-        console.error('Hiba a termékek lekérdezésekor:', hiba);
-        setHiba('Nem sikerült betölteni a termékeket.');
+        console.error("Hiba a termékek lekérdezésekor:", hiba);
+        setHiba("Nem sikerült betölteni a termékeket.");
         setBetolt(false);
       });
   }, []);
 
   const reszletek=(termek)=>{
-    console.log('Kiválaszott termék:',termek);
+    console.log("Kiválaszott termék:",termek);
     setKivalasztottTermek(termek);
   }
 

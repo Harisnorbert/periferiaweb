@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const TermekSchema = new mongoose.Schema({
     nev: String,
     ar: Number,
@@ -18,4 +18,4 @@ const RendelesSchema = new mongoose.Schema({
   datum: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Rendeles', RendelesSchema);
+module.exports = mongoose.model("Rendeles", RendelesSchema);

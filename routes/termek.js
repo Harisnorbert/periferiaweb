@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Termek = require('../models/termek');
+const Termek = require("../models/termek");
 
 //Összes termék lekérdezése
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const termekek = await Termek.find();
     res.status(200).json(termekek);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 //Új termék létrehozása
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { name, price, description } = req.body;
     const ujTermek = new Termek({ name, price, description });
