@@ -12,7 +12,7 @@ const Regisztracio = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/felhasznalo/regisztracio", form);
+      const response = await axios.post("http://localhost:5000/felhasznalo/regisztracio",form, {headers:{ "Content-Type": "application/json" }});
       alert("Sikeres regisztráció!");
       console.log("Szerver válasza:", response.data);
       navigate("/bejelentkezes");

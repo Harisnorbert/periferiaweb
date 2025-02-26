@@ -3,6 +3,10 @@ const bcrypt = require("bcryptjs");
 
 const FelhasznaloSchema = new mongoose.Schema({
   nev: { type: String, required: true },
+  irsz: { type: String, required: true },
+  varos: { type: String, required: true },
+  utcaHazszam: { type: String, required: true },
+  telefon: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   jelszo: { type: String, required: true }
 });
