@@ -1,80 +1,17 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const session = require("express-session");
-const flash = require("connect-flash");
+const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const Felhasznalo = require("../models/felhasznalo");
 const router = express.Router();
-
-// Express Session konfiguráció
-router.use(
-  session({
-    secret: "valamilyen_titkos_kulcs", // Fontos: cseréld le egy biztonságos kulcsra!
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-// Passport middleware inicializálása
-router.use(passport.initialize());
-router.use(passport.session());
-router.use(flash());
-
-// Passport konfiguráció
-passport.use(
-  new LocalStrategy(
-    { usernameField: "email" },
-    async (email, jelszo, done) => {
-      try {
-        const felhasznalo = await Felhasznalo.findOne({ email });
-        if (!felhasznalo) {
-          return done(null, false, { message: "Hibás email vagy jelszó!" });
-        }
-
-        const jelszoEllenorzes = await bcrypt.compare(jelszo, felhasznalo.jelszo);
-        if (!jelszoEllenorzes) {
-          return done(null, false, { message: "Hibás email vagy jelszó!" });
-        }
-
-        return done(null, felhasznalo);
-      } catch (err) {
-        return done(err);
-      }
-    }
-  )
-);
-
-passport.serializeUser((felhasznalo, done) => {
-  done(null, felhasznalo.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const felhasznalo = await Felhasznalo.findById(id);
-    done(null, felhasznalo);
-  } catch (err) {
-    done(err);
-  }
-});
 
 // Regisztráció
 router.post("/regisztracio", async (req, res) => {
   const { nev, irsz, varos, utcaHazszam, telefon, email, jelszo } = req.body;
   try {
-    if (!nev || !irsz || !varos || !utcaHazszam || !telefon || !email || !jelszo) {
-      return res.status(400).json({ message: "Minden mező kitöltése kötelező!" });
-    }
-
     const letezoFelhasznalo = await Felhasznalo.findOne({ email });
     if (letezoFelhasznalo) {
-      return res
-        .status(400)
-        .json({ message: "Ez az email cím már létezik, kérlek jelentkezz be!" });
+      return res.status(400).json({ message: "Ez az email cím már létezik!" });
     }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(jelszo, salt);
 
     const ujFelhasznalo = new Felhasznalo({
       nev,
@@ -83,11 +20,11 @@ router.post("/regisztracio", async (req, res) => {
       utcaHazszam,
       telefon,
       email,
-      jelszo: hashedPassword,
+      jelszo,  // A jelszó hash-elése automatikusan megtörténik a modelben
     });
 
     await ujFelhasznalo.save();
-    res.status(201).json({ message: "Felhasználó sikeresen létrehozva!" });
+    res.status(201).json({ message: "Sikeres regisztráció!" });
   } catch (err) {
     console.error("Hiba a regisztráció során:", err);
     res.status(500).json({ message: "Hiba a regisztráció során!" });
@@ -95,23 +32,52 @@ router.post("/regisztracio", async (req, res) => {
 });
 
 // Bejelentkezés
-router.post(
-  "/bejelentkezes",
-  passport.authenticate("local", {
-    successRedirect: "/sikeres-bejelentkezes", // Átirányítás sikeres bejelentkezés esetén
-    failureRedirect: "/sikertelen-bejelentkezes", // Átirányítás sikertelen bejelentkezés esetén
-    failureFlash: true,
-  })
-);
+router.post("/bejelentkezes", async (req, res) => {
+  const { email, jelszo } = req.body;
+  try {
+    const felhasznalo = await Felhasznalo.findOne({ email });
+    if (!felhasznalo) {
+      return res.status(401).json({ message: "Nincs ilyen e-mail cím!" });
+    }
 
-// Sikeres bejelentkezés útvonal
-router.get("/sikeres-bejelentkezes", (req, res) => {
-  res.json({ message: "Sikeres bejelentkezés!", felhasznalo: req.user });
+    const egyezik = await bcryptjs.compare(jelszo, felhasznalo.jelszo);
+    if (!egyezik) {
+      return res.status(401).json({ message: "Hibás jelszó!" });
+    }
+
+    const token = jwt.sign(
+      { felhasznaloId: felhasznalo._id },
+      process.env.JWT_SECRET, // Titkos kulcs, ami környezeti változóban van
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token, felhasznalo, message: "Sikeres bejelentkezés!" });
+  } catch (err) {
+    console.error("Hiba a bejelentkezés során:", err);
+    res.status(500).json({ message: "Hiba a bejelentkezés során!" });
+  }
 });
 
-// Sikertelen bejelentkezés útvonal
-router.get("/sikertelen-bejelentkezes", (req, res) => {
-  res.status(401).json({ message: req.flash("error")[0] });
+// Felhasználó adatainak lekérése
+router.get("/", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];  // Token a request header-ből
+    if (!token) {
+      return res.status(401).json({ message: "Nincs jogosultság" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await Felhasznalo.findById(decoded.felhasznaloId);  // Felhasználó keresése ID alapján
+
+    if (!user) {
+      return res.status(404).json({ message: "Felhasználó nem található" });
+    }
+
+    res.json({ felhasznalo: user });
+  } catch (error) {
+    console.error("Hiba a felhasználó lekérésekor:", error);
+    res.status(500).json({ message: "Szerverhiba a felhasználó lekérésekor" });
+  }
 });
 
 module.exports = router;

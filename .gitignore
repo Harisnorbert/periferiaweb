@@ -5,6 +5,7 @@ build/
 .vscode/
 .DS_Store
 npm-debug.log
+.env
 # Logs
 logs
 *.log

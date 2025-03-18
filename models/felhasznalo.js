@@ -1,27 +1,55 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const bcryptjs = require("bcryptjs");
 
-const FelhasznaloSchema = new mongoose.Schema({
-  nev: { type: String, required: true },
-  irsz: { type: String, required: true },
-  varos: { type: String, required: true },
-  utcaHazszam: { type: String, required: true },
-  telefon: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  jelszo: { type: String, required: true }
-});
+// Felhasználó sémája
+const FelhasznaloSchema = new mongoose.Schema(
+  {
+    nev: {
+      type: String,
+      required: true,
+    },
+    irsz: {
+      type: String,
+      required: true,
+    },
+    varos: {
+      type: String,
+      required: true,
+    },
+    utcaHazszam: {
+      type: String,
+      required: true,
+    },
+    telefon: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,  // Az email cím egyedinek kell lennie
+    },
+    jelszo: {
+      type: String,
+      required: true,
+    },
+    kosar: {
+      type: Array,
+      default: [],  // Alapértelmezett üres kosár
+    },
+  },
+  { timestamps: true }  // Nyomon követhetjük a létrehozás és frissítés időpontját
+);
 
-// Jelszó hashelés mentés előtt
+// Mielőtt elmentenénk, a jelszót hash-eljük
 FelhasznaloSchema.pre("save", async function (next) {
-  if (!this.isModified("jelszo")) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.jelszo = await bcrypt.hash(this.jelszo, salt);
+  if (this.isModified("jelszo")) {
+    this.jelszo = await bcryptjs.hash(this.jelszo, 10);  // Jelszó hash-elése a bcryptjs segítségével
+  }
   next();
 });
 
-// Jelszó ellenőrzés
-FelhasznaloSchema.methods.validPassword = function (jelszo) {
-  return bcrypt.compare(jelszo, this.jelszo);
-};
+// A Felhasznalo modell létrehozása
+const Felhasznalo = mongoose.model("Felhasznalo", FelhasznaloSchema);
 
-module.exports = mongoose.model("Felhasznalo", FelhasznaloSchema);
+module.exports = Felhasznalo;

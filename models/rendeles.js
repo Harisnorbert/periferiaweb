@@ -1,17 +1,21 @@
 const mongoose = require("mongoose");
+
 const TermekSchema = new mongoose.Schema({
-    nev: String,
-    ar: Number,
-    leiras: String
-  });
+  nev: String,
+  ar: Number,
+  leiras: String
+});
 
 const RendelesSchema = new mongoose.Schema({
-  nev: { type: String, required: true },
-  irsz: { type: String, required: true },
-  varos: { type: String, required: true },
-  utcaHazszam: { type: String, required: true },
-  telefon: { type: String, required: true },
-  email: { type: String, required: true },
+  felhasznalo: { type: mongoose.Schema.Types.ObjectId, ref: "Felhasznalo", default: null }, // Bejelentkezett felhasználó
+  vendegAdatok: {
+    nev: { type: String },
+    irsz: { type: String },
+    varos: { type: String },
+    utcaHazszam: { type: String },
+    telefon: { type: String },
+    email: { type: String },
+  },
   fizetesiMod: { type: String, required: true },
   osszAr: { type: Number, required: true },
   kosar: [TermekSchema],

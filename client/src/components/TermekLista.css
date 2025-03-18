@@ -1,86 +1,48 @@
 .termekek-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .termek-kartya {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    background-color: rgb(255, 255, 255);
-    transition: transform 0.3s;
-  }
-  
-  .termek-kartya:hover {
-    transform: translateY(-50px);
-  }
-  
-  .termek-kartya h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .termek-kartya p {
-    font-size: 1rem;
-    color: #000000;
-  }
-  .termekek-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .termek-kartya {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    text-align: center;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  
-  .termek-kartya:hover {
-    transform: translateY(-5px);
-  }
-  
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-tartalom {
-    background-color: rgb(255, 255, 255);
-    padding: 30px;
-    border-radius: 10px;
-    width: 500px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  .modalzaras {
-    float: right;
-    font-size: 30px;
-    cursor: pointer;
-  }
-  
-  .modalzaras:hover {
-    color: red;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.termek-kartya {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  width: 220px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.termek-kartya:hover {
+  transform: scale(1.05);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-tartalom {
+  background-color: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 400px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.modalzaras {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 24px;
+  cursor: pointer;
+}

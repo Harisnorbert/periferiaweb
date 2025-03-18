@@ -1,64 +1,57 @@
+require("dotenv").config();  // Környezeti változók betöltése
+
 const express = require("express");
 const mongoose = require("mongoose");
-const passport = require("passport");
-const session = require("express-session");
+const cors = require("cors");
+const path = require("path");
+
+const felhasznaloRoutes = require("./routes/felhasznalo");
 const termekRoutes = require("./routes/termek");
 const rendelesRoutes = require("./routes/rendeles");
-const felhasznaloRoutes = require("./routes/felhasznalo");
-const cors = require("cors");
+const kosarRoutes = require("./routes/kosar");
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-//Middlewarek
-app.use(express.json());
-app.use(session({
-  secret: "titkoskulcs",
-  resave: false,
-  saveUninitialized: false
-}));
-
-//Passport
-require("./config/passport")(passport);
-app.use(passport.initialize());
-app.use(passport.session());
-
-//CORS
+// CORS middleware – Engedélyezzük a hozzáférést a megfelelő domainről
 app.use(cors({
-  origin: "http://localhost:3000",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  origin: process.env.CORS_ORIGIN || "*",  // Ha csak egy domainre szeretnéd korlátozni: "http://localhost:3000"
+  methods: "GET, POST, PUT, DELETE, OPTIONS",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  credentials: true,
 }));
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
+// Express beállítások
+app.use(express.json());
+
+// Alapértelmezett GET végpont, hogy teszteld a működést
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Szerver fut és CORS engedélyezve van!" });
 });
 
-//MongoDB
-mongoose.connect("mongodb+srv://Haris00:adminadmin@periferiaweb.kmaoz.mongodb.net/periferiaweb?retryWrites=true&w=majority&appName=periferiaweb")
-  .then(() => console.log("MongoDB sikeresen csatlakozott"))
-  .catch(err => console.error("MongoDB kapcsolódási hiba:", err));
-
-//Routeok
-app.use("/termek", termekRoutes);
-app.use("/rendeles", rendelesRoutes);
+// API végpontok beállítása
+app.use("/kosar", kosarRoutes);
 app.use("/felhasznalo", felhasznaloRoutes);
+app.use("/termekek", termekRoutes);
+app.use("/rendeles", rendelesRoutes);
 
-//Termékek lekérése
-app.get("/termek", async (req, res) => {
-  try {
-    const termekek = await Termek.find();
-    res.status(200).json(termekek);
-  } catch (hiba) {
-    res.status(500).json({ uzenet: "Nem sikerült lekérni a termékeket." });
+// Statikus fájlok kiszolgálása
+app.use(express.static(path.join(__dirname, "public")));
+
+// MongoDB kapcsolat (környezeti változóban tárolt URI használata)
+mongoose
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ MongoDB sikeresen csatlakozott"))
+  .catch((err) => console.error("❌ MongoDB kapcsolódási hiba:", err));
+
+// Az összes regisztrált route kiírása
+app._router.stack.forEach((r) => {
+  if (r.route && r.route.path) {
+    console.log(`🛠️ Registered route: ${r.route.path}`);
   }
 });
 
-//Szerver indítása
+// Szerver indítása
 app.listen(port, () => {
   console.log(`Szerver fut a ${port} porton`);
 });
