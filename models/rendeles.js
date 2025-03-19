@@ -1,24 +1,36 @@
 const mongoose = require("mongoose");
 
-const TermekSchema = new mongoose.Schema({
-  nev: String,
-  ar: Number,
-  leiras: String
-});
-
 const RendelesSchema = new mongoose.Schema({
-  felhasznalo: { type: mongoose.Schema.Types.ObjectId, ref: "Felhasznalo", default: null }, // Bejelentkezett felhasználó
-  vendegAdatok: {
-    nev: { type: String },
-    irsz: { type: String },
-    varos: { type: String },
-    utcaHazszam: { type: String },
-    telefon: { type: String },
-    email: { type: String },
-  },
+  // Bejelentkezett felhasználó ID-je (ha van)
+  felhasznaloId: { type: mongoose.Schema.Types.ObjectId, ref: "Felhasznalo", default: null },
+
+  // A rendeléshez szükséges személyes adatok (bejelentkezés nélkülieknek is)
+  nev: { type: String, required: true },
+  irsz: { type: String, required: true },
+  varos: { type: String, required: true },
+  utcaHazszam: { type: String, required: true },
+  telefon: { type: String, required: true },
+  email: { type: String, required: true },
+
+  // Kosár tartalma
+  kosar: [
+    {
+      nev: String,
+      ar: Number,
+      leiras: String
+    }
+  ],
+
+  // Fizetési mód
   fizetesiMod: { type: String, required: true },
+
+  // Rendelés összegének tárolása
   osszAr: { type: Number, required: true },
-  kosar: [TermekSchema],
+
+  // Ha bankkártyás fizetés történt, ezt tároljuk
+  kartyaFizetes: { type: Boolean, default: false },
+
+  // Rendelés dátuma
   datum: { type: Date, default: Date.now }
 });
 

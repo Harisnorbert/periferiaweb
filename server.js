@@ -41,13 +41,13 @@ app.use(express.static(path.join(__dirname, "public")));
 // MongoDB kapcsolat (környezeti változóban tárolt URI használata)
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ MongoDB sikeresen csatlakozott"))
+  .then(() => console.log("MongoDB sikeresen csatlakozott"))
   .catch((err) => console.error("❌ MongoDB kapcsolódási hiba:", err));
 
 // Az összes regisztrált route kiírása
 app._router.stack.forEach((r) => {
   if (r.route && r.route.path) {
-    console.log(`🛠️ Registered route: ${r.route.path}`);
+    console.log(`Registered route: ${r.route.path}`);
   }
 });
 

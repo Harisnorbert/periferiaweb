@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const Felhasznalo = require("../models/felhasznalo");
 const router = express.Router();
 
-// Regisztráció
+// **Regisztráció**
 router.post("/regisztracio", async (req, res) => {
   const { nev, irsz, varos, utcaHazszam, telefon, email, jelszo } = req.body;
   try {
@@ -13,6 +13,7 @@ router.post("/regisztracio", async (req, res) => {
       return res.status(400).json({ message: "Ez az email cím már létezik!" });
     }
 
+    const hashedJelszo = await bcryptjs.hash(jelszo, 10); // Jelszó titkosítása
     const ujFelhasznalo = new Felhasznalo({
       nev,
       irsz,
@@ -20,7 +21,7 @@ router.post("/regisztracio", async (req, res) => {
       utcaHazszam,
       telefon,
       email,
-      jelszo,  // A jelszó hash-elése automatikusan megtörténik a modelben
+      jelszo: hashedJelszo,
     });
 
     await ujFelhasznalo.save();
@@ -31,7 +32,7 @@ router.post("/regisztracio", async (req, res) => {
   }
 });
 
-// Bejelentkezés
+// **Bejelentkezés**
 router.post("/bejelentkezes", async (req, res) => {
   const { email, jelszo } = req.body;
   try {
@@ -47,7 +48,7 @@ router.post("/bejelentkezes", async (req, res) => {
 
     const token = jwt.sign(
       { felhasznaloId: felhasznalo._id },
-      process.env.JWT_SECRET, // Titkos kulcs, ami környezeti változóban van
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -58,25 +59,64 @@ router.post("/bejelentkezes", async (req, res) => {
   }
 });
 
-// Felhasználó adatainak lekérése
+// **Felhasználó adatainak lekérése (védett végpont)**
 router.get("/", async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];  // Token a request header-ből
+    const token = req.headers.authorization?.split(" ")[1];  
     if (!token) {
       return res.status(401).json({ message: "Nincs jogosultság" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await Felhasznalo.findById(decoded.felhasznaloId);  // Felhasználó keresése ID alapján
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+      if (err) {
+        if (err.name === "TokenExpiredError") {
+          return res.status(401).json({ error: "jwt expired" });
+        }
+        return res.status(403).json({ message: "Érvénytelen token" });
+      }
 
-    if (!user) {
-      return res.status(404).json({ message: "Felhasználó nem található" });
-    }
+      const user = await Felhasznalo.findById(decoded.felhasznaloId);
+      if (!user) {
+        return res.status(404).json({ message: "Felhasználó nem található" });
+      }
 
-    res.json({ felhasznalo: user });
+      res.json({ felhasznalo: user });
+    });
   } catch (error) {
     console.error("Hiba a felhasználó lekérésekor:", error);
     res.status(500).json({ message: "Szerverhiba a felhasználó lekérésekor" });
+  }
+});
+
+// **Token frissítés (új végpont)**
+router.post("/refresh-token", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];  
+    if (!token) {
+      return res.status(401).json({ message: "Nincs jogosultság" });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        if (err.name === "TokenExpiredError") {
+          // Új token generálása
+          const ujToken = jwt.sign(
+            { felhasznaloId: decoded.felhasznaloId },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+          );
+
+          return res.json({ token: ujToken });
+        }
+        return res.status(403).json({ message: "Érvénytelen token" });
+      }
+
+      // Ha a token még érvényes, nem kell frissíteni
+      res.json({ token });
+    });
+  } catch (error) {
+    console.error("Hiba a token frissítésekor:", error);
+    res.status(500).json({ message: "Szerverhiba a token frissítésekor" });
   }
 });
 

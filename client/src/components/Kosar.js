@@ -23,6 +23,7 @@ const Kosar = ({ kosar, torlesKosarbol }) => {
       )}
       <p><strong>Összesen:</strong> {osszAr} Ft</p>
       {kosar.length > 0 && (
+        
         <button className="fizetes-gomb" onClick={() => navigate("/FizetesOldal")}>
           Fizetés
         </button>
@@ -30,5 +31,4 @@ const Kosar = ({ kosar, torlesKosarbol }) => {
     </div>
   );
 };
-
 export default Kosar;
