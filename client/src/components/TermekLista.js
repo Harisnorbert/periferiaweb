@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./TermekLista.css";
+//import "./TermekLista.css";
 
 const TermekLista = ({hozzaadKosarhoz }) => {
   const [termekek, setTermekek] = useState([]);
@@ -34,7 +34,7 @@ const TermekLista = ({hozzaadKosarhoz }) => {
   return (
     <section id="termekek-szakasz">
       <h2>Elérhető termékek</h2>
-      <div className="termekek-container">
+      <div className="termek-lista">
         {termekek.length === 0 ? (
           <p>Jelenleg nincsenek elérhető termékek.</p>
         ) : (

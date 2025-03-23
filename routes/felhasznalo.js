@@ -13,7 +13,6 @@ router.post("/regisztracio", async (req, res) => {
       return res.status(400).json({ message: "Ez az email cím már létezik!" });
     }
 
-    const hashedJelszo = await bcryptjs.hash(jelszo, 10); // Jelszó titkosítása
     const ujFelhasznalo = new Felhasznalo({
       nev,
       irsz,
@@ -21,7 +20,7 @@ router.post("/regisztracio", async (req, res) => {
       utcaHazszam,
       telefon,
       email,
-      jelszo: hashedJelszo,
+      jelszo, 
     });
 
     await ujFelhasznalo.save();
@@ -117,6 +116,38 @@ router.post("/refresh-token", async (req, res) => {
   } catch (error) {
     console.error("Hiba a token frissítésekor:", error);
     res.status(500).json({ message: "Szerverhiba a token frissítésekor" });
+  }
+});
+
+router.put("/", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "Nincs jogosultság" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const felhasznalo = await Felhasznalo.findById(decoded.felhasznaloId);
+    if (!felhasznalo) return res.status(404).json({ message: "Felhasználó nem található" });
+
+    // Ha az email változott, ellenőrizzük, hogy nem-e foglalt
+    if (req.body.email && req.body.email !== felhasznalo.email) {
+      const letezo = await Felhasznalo.findOne({ email: req.body.email });
+      if (letezo) return res.status(400).json({ message: "Ez az email már foglalt." });
+    }
+
+    // Frissítjük a mezőket
+    ["nev", "email", "telefon", "irsz", "varos", "utcaHazszam"].forEach(mezo => {
+      if (req.body[mezo]) felhasznalo[mezo] = req.body[mezo];
+    });
+
+    if (req.body.jelszo && req.body.jelszo.length >= 4) {
+      felhasznalo.jelszo = await bcrypt.hash(req.body.jelszo, 10);
+    }
+
+    await felhasznalo.save();
+    res.json({ message: "Adatok frissítve!", felhasznalo });
+  } catch (error) {
+    console.error("Hiba a felhasználó frissítésekor:", error);
+    res.status(500).json({ message: "Szerverhiba frissítés közben" });
   }
 });
 

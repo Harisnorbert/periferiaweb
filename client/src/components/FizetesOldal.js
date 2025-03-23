@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./FizetesOldal.css";
+//import "./FizetesOldal.css";
 
 const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const [felhasznalo, setFelhasznalo] = useState(null);
@@ -17,21 +17,18 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const [cvc, setCvc] = useState("");
   const navigate = useNavigate();
 
-  // **Kosár betöltése localStorage-ból**
+  // Kosár betöltése
   useEffect(() => {
     const taroltKosar = JSON.parse(localStorage.getItem("kosar")) || [];
-    if (taroltKosar.length > 0) {
-      console.log("Kosár betöltve a localStorage-ből:", taroltKosar);
-      setKosar([...taroltKosar]);
-    }
+    setKosar(taroltKosar);
   }, [setKosar]);
 
-  // **Felhasználói adatok betöltése az adatbázisból**
+  // Felhasználói adatok betöltése
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       axios.get("http://localhost:5000/felhasznalo", {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         if (res.data.felhasznalo) {
@@ -45,31 +42,45 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
           setEmail(user.email || "");
         }
       })
-      .catch((err) => console.error("Hiba a profil betöltésekor:", err));
+      .catch((err) => console.error("Hiba a felhasználó betöltésekor:", err));
     }
   }, []);
 
-  const osszAr = kosar.reduce((osszeg, termek) => osszeg + (Number(termek.ar) || Number(termek.price) || 0), 0);
+  const osszAr = kosar.reduce(
+    (osszeg, termek) => osszeg + (Number(termek.ar) || Number(termek.price)) * (termek.db || 1),
+    0
+  );
 
   const kezelRendelest = async (e) => {
     e.preventDefault();
-  
-    // Kosár betöltése localStorage-ból, ha esetleg az állapotban üres lenne
-    const aktualisKosar = JSON.parse(localStorage.getItem("kosar")) || [];
-  
-    if (!aktualisKosar || aktualisKosar.length === 0) {
-      alert("A kosár üres! Nem lehet rendelést leadni.");
+
+    if (kosar.length === 0) {
+      alert("A kosár üres!");
       return;
     }
-  
-    console.log("Rendelés előtt a kosár tartalma:", aktualisKosar);
-  
-    const osszAr = aktualisKosar.reduce((osszeg, termek) => osszeg + (Number(termek.ar) || Number(termek.price) || 0), 0);
-  
+
+    if (fizetesiMod === "bankkártya") {
+      if (!kartyaSzam || !lejaratiDatum || !cvc) {
+        alert("Kérlek, töltsd ki a bankkártya adatokat!");
+        return;
+      }
+      if (kartyaSzam.length !== 16 || isNaN(kartyaSzam)) {
+        alert("A kártyaszámnak 16 számjegyből kell állnia!");
+        return;
+      }
+      if (!/^\d{2}\/\d{2}$/.test(lejaratiDatum)) {
+        alert("A lejárati dátumnak MM/YY formátumúnak kell lennie!");
+        return;
+      }
+      if (cvc.length !== 3 || isNaN(cvc)) {
+        alert("A CVC-nek 3 számjegyből kell állnia!");
+        return;
+      }
+    }
+
     try {
       const rendelesAdatok = {
         felhasznaloId: felhasznalo ? felhasznalo._id : null,
-        // **Most mindig elküldjük a felhasználói adatokat is, nem csak a felhasznaloId-t!**
         nev,
         irsz,
         varos,
@@ -78,68 +89,73 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
         email,
         fizetesiMod,
         osszAr,
-        kosar: aktualisKosar.map((termek) => ({
+        kosar: kosar.map((termek) => ({
           nev: termek.nev || termek.name,
           ar: Number(termek.ar) || Number(termek.price),
           leiras: termek.leiras || termek.description || "",
+          db: termek.db || 1
         })),
-        kartyaAdatok: fizetesiMod === "bankkártya" ? { kartyaSzam, lejaratiDatum, cvc } : null
+        kartyaAdatok: fizetesiMod === "bankkártya" ? {
+          kartyaSzam,
+          lejaratiDatum,
+          cvc
+        } : null,
       };
-  
-      console.log("Rendelés adatok küldése a szerverre:", rendelesAdatok);
-  
-      const response = await axios.post("http://localhost:5000/rendeles", rendelesAdatok);
-      console.log("Sikeres rendelés:", response.data);
-      alert(`Rendelés sikeresen leadva! Összesen: ${osszAr} Ft`);
-  
+
+      console.log("Rendelés elküldve:", rendelesAdatok);
+
+      await axios.post("http://localhost:5000/rendeles", rendelesAdatok);
+      alert(`Rendelés sikeres! Összeg: ${osszAr} Ft`);
       kosarUrites();
       navigate("/");
     } catch (error) {
-      console.error("Hiba a rendelés mentésekor:", error.response ? error.response.data : error.message);
-      alert("Hiba történt a rendelés leadásakor.");
+      console.error("Hiba rendeléskor:", error.response?.data || error.message);
+      alert("Hiba történt a rendelés során!");
     }
   };
 
   return (
-    <div className="fizetes-oldal">
+    <div className="form-container">
       <h2>Fizetés</h2>
 
       <h3>Rendelés tartalma:</h3>
       <ul>
         {kosar.map((termek, index) => (
           <li key={index}>
-            {termek.nev || termek.name} - {Number(termek.ar) || Number(termek.price)} Ft
+            {termek.nev || termek.name} × {termek.db || 1} –{" "}
+            {(Number(termek.ar) || Number(termek.price)) * (termek.db || 1)} Ft
           </li>
         ))}
       </ul>
-
-      <h3>Szállítási adatok</h3>
+        <div className="fizetes-oldal">
       <form onSubmit={kezelRendelest}>
+        <h3>Szállítási adatok</h3>
         <label>Teljes név:<input type="text" value={nev} onChange={(e) => setNev(e.target.value)} required /></label>
         <label>Irányítószám:<input type="text" value={irsz} onChange={(e) => setIrsz(e.target.value)} required /></label>
         <label>Város:<input type="text" value={varos} onChange={(e) => setVaros(e.target.value)} required /></label>
-        <label>Utca és házszám:<input type="text" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required /></label>
+        <label>Utca, házszám:<input type="text" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required /></label>
         <label>Telefonszám:<input type="tel" value={telefon} onChange={(e) => setTelefon(e.target.value)} required /></label>
         <label>Email:<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></label>
 
         <label>Fizetési mód:
           <select value={fizetesiMod} onChange={(e) => setFizetesiMod(e.target.value)}>
             <option value="utanvet">Utánvét</option>
-            <option value="bankkártya">Bankkártya</option> 
+            <option value="bankkártya">Bankkártya</option>
           </select>
         </label>
 
         {fizetesiMod === "bankkártya" && (
           <>
-            <label>Kártyaszám:<input type="text" maxLength="16" value={kartyaSzam} onChange={(e) => setKartyaSzam(e.target.value)} required /></label>
-            <label>Lejárati dátum (MM/YY):<input type="text" maxLength="5" value={lejaratiDatum} onChange={(e) => setLejaratiDatum(e.target.value)} required /></label>
-            <label>CVC:<input type="text" maxLength="3" value={cvc} onChange={(e) => setCvc(e.target.value)} required /></label>
+            <label>Kártyaszám:<input type="text" value={kartyaSzam} onChange={(e) => setKartyaSzam(e.target.value)} required /></label>
+            <label>Lejárati dátum:<input type="text" value={lejaratiDatum} onChange={(e) => setLejaratiDatum(e.target.value)} required /></label>
+            <label>CVC:<input type="text" value={cvc} onChange={(e) => setCvc(e.target.value)} required /></label>
           </>
         )}
 
         <p><strong>Összesen:</strong> {osszAr} Ft</p>
         <button type="submit">Rendelés leadása</button>
       </form>
+      </div>
     </div>
   );
 };

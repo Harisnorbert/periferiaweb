@@ -17,7 +17,8 @@ const RendelesSchema = new mongoose.Schema({
     {
       nev: String,
       ar: Number,
-      leiras: String
+      leiras: String,
+      db:{type:Number,default:1}
     }
   ],
 

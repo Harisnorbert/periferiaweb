@@ -1,0 +1,246 @@
+/* === PERIFERIA ULTRA THEME — eMAG-szerű, átlátható, reszponzív === */
+:root {
+    --bg-color: #f4f6f8;
+    --text-color: #111;
+    --card-bg: #fff;
+    --accent-color: #2ecc71;
+    --border-color: #dcdcdc;
+    --button-bg: #2ecc71;
+    --button-text: #000;
+  }
+  
+  [data-theme="dark"] {
+    --bg-color: #0e1116;
+    --text-color: #f1f1f1;
+    --card-bg: #181d24;
+    --accent-color: #58ffb0;
+    --border-color: #2a2f38;
+    --button-bg: #58ffb0;
+    --button-text: #0e1116;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Rubik', 'Segoe UI', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  .page-wrapper {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  h1, h2, h3 {
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+  }
+  
+  
+  /* === Header === */
+  .App-header {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .nav-links,
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-link,
+.nav-user {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+  
+.nav-link:hover,
+.nav-user:hover {
+  background-color: var(--border-color);
+}
+  
+.logout-btn, .fizetes-gomb, button[type="submit"], .theme-toggle {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, filter 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  
+  .logout-btn:hover, .fizetes-gomb:hover, .theme-toggle:hover {
+    filter: brightness(0.95);
+    background-color: var(--accent-color);
+  }
+  /* === Termékek rácsban === */
+  .termek-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .termek-kartya {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .termek-kartya:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* === Kosár oldalra igazítva === */
+  .kosar-panel {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+  }
+  
+  .kosar-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+  }
+  
+  .kosar-muveletek button {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin: 0 4px;
+  }
+  
+  .torles-gomb {
+    background: none;
+    border: none;
+    color: #ff5c5c;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  .kosar-osszeg {
+    text-align: right;
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-top: 1rem;
+  }
+  
+  /* === Forms és Profil oldalak === */
+  input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    margin-bottom: 1rem;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px var(--accent-color);
+  }
+  
+  .form-container, .profil-adatok, .fizetes-oldal {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+  }
+  
+  /* === Rendelések === */
+  .rendelesek-wrapper {
+    display: grid;
+    gap: 2rem;
+  }
+  
+  .rendeles {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--card-bg);
+    padding: 1rem 1.5rem;
+  }
+  
+  .termekek-lista {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .termekek-lista li {
+    margin-bottom: 4px;
+  }
+  
+  /* === Téma váltó gomb === */
+  .theme-toggle {
+    margin-top: 1rem;
+    align-self: flex-end;
+  }
+  
+  /* === Reszponzív === */
+  @media (max-width: 992px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+  
+    .kosar-panel {
+      position: relative;
+      top: auto;
+      margin-top: 2rem;
+    }
+  }
+  
