@@ -13,7 +13,10 @@ import AdminTermekek from "./components/admin/AdminTermekek";
 import AdminRendelesek from "./components/admin/AdminRendelesek";
 
 function App() {
-  const [felhasznalo, setFelhasznalo] = useState(JSON.parse(localStorage.getItem("felhasznalo")) || null);
+  const [felhasznalo, setFelhasznalo] = useState(() => {
+    const adat = localStorage.getItem("felhasznalo");
+    return adat ? JSON.parse(adat) : null;
+  });
   const [kosar, setKosar] = useState(() => {
     return JSON.parse(localStorage.getItem("kosar")) || [];
   });

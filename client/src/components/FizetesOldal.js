@@ -17,7 +17,8 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const taroltKosar = JSON.parse(localStorage.getItem("kosar")) || [];
+    const tarolt = localStorage.getItem("kosar");
+    const taroltKosar = tarolt ? JSON.parse(tarolt) : [];
     setKosar(taroltKosar);
   }, [setKosar]);
 
