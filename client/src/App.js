@@ -14,11 +14,22 @@ import AdminRendelesek from "./components/admin/AdminRendelesek";
 
 function App() {
   const [felhasznalo, setFelhasznalo] = useState(() => {
-    const adat = localStorage.getItem("felhasznalo");
-    return adat ? JSON.parse(adat) : null;
+    try {
+      const raw = localStorage.getItem("felhasznalo");
+      if (!raw || raw === "undefined") return null;
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
   });
   const [kosar, setKosar] = useState(() => {
-    return JSON.parse(localStorage.getItem("kosar")) || [];
+    try {
+      const raw = localStorage.getItem("kosar");
+      if (!raw || raw === "undefined") return [];
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
   });
 
   const navigate = useNavigate();

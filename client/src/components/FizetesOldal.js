@@ -17,10 +17,16 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const tarolt = localStorage.getItem("kosar");
-    const taroltKosar = tarolt ? JSON.parse(tarolt) : [];
-    setKosar(taroltKosar);
+    try {
+      const tarolt = localStorage.getItem("kosar");
+      const taroltKosar = tarolt && tarolt !== "undefined" ? JSON.parse(tarolt) : [];
+      setKosar(taroltKosar);
+    } catch (e) {
+      console.error("Hibás kosáradat a localStorage-ben:", e);
+      setKosar([]);
+    }
   }, [setKosar]);
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
