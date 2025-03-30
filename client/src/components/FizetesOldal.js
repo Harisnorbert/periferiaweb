@@ -124,7 +124,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
         } : null,
       };
 
-      await axios.post("http://localhost:5000/rendeles", rendelesAdatok);
+      await axios.post("${process.env.REACT_APP_API_URL}/rendeles", rendelesAdatok);
       alert(`Rendelés sikeres! Összeg: ${osszAr} Ft`);
       kosarUrites();
       navigate("/");

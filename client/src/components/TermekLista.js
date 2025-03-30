@@ -10,7 +10,7 @@ const TermekLista = ({ hozzaadKosarhoz }) => {
   const [darab, setDarab] = useState(1);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/termekek")
+    axios.get("${process.env.REACT_APP_API_URL}/termekek")
       .then((res) => {
         setTermekek(res.data);
         setBetolt(false);

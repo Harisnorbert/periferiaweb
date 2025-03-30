@@ -16,7 +16,7 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
 
     setForm({ ...felhasznalo, jelszo: "" });
 
-    axios.get(`http://localhost:5000/rendeles/felhasznalo/${felhasznalo._id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/felhasznalo/${felhasznalo._id}`)
       .then(res => setRendelesek(res.data))
       .catch(err => console.error("Hiba a rendelések lekérésekor:", err));
   }, [felhasznalo, navigate]);
@@ -28,7 +28,7 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put("http://localhost:5000/felhasznalo", form, {
+      const response = await axios.put("${process.env.REACT_APP_API_URL}/felhasznalo", form, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
