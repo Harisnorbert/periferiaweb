@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const Felhasznalo = require("../models/felhasznalo");
 const router = express.Router();
 
-// **Regisztráció**
 router.post("/regisztracio", async (req, res) => {
   const { nev, irsz, varos, utcaHazszam, telefon, email, jelszo } = req.body;
   try {
@@ -20,7 +19,8 @@ router.post("/regisztracio", async (req, res) => {
       utcaHazszam,
       telefon,
       email,
-      jelszo, 
+      jelszo,
+      admin:false,
     });
 
     await ujFelhasznalo.save();
@@ -31,7 +31,6 @@ router.post("/regisztracio", async (req, res) => {
   }
 });
 
-// **Bejelentkezés**
 router.post("/bejelentkezes", async (req, res) => {
   const { email, jelszo } = req.body;
   try {
@@ -58,7 +57,6 @@ router.post("/bejelentkezes", async (req, res) => {
   }
 });
 
-// **Felhasználó adatainak lekérése (védett végpont)**
 router.get("/", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];  
@@ -87,7 +85,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// **Token frissítés (új végpont)**
 router.post("/refresh-token", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];  
@@ -98,7 +95,6 @@ router.post("/refresh-token", async (req, res) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         if (err.name === "TokenExpiredError") {
-          // Új token generálása
           const ujToken = jwt.sign(
             { felhasznaloId: decoded.felhasznaloId },
             process.env.JWT_SECRET,
@@ -110,7 +106,6 @@ router.post("/refresh-token", async (req, res) => {
         return res.status(403).json({ message: "Érvénytelen token" });
       }
 
-      // Ha a token még érvényes, nem kell frissíteni
       res.json({ token });
     });
   } catch (error) {

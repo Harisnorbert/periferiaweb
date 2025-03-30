@@ -1,38 +1,36 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-//import "./TermekLista.css";
+import "./gameresui.css";
 
-const TermekLista = ({hozzaadKosarhoz }) => {
+const TermekLista = ({ hozzaadKosarhoz }) => {
   const [termekek, setTermekek] = useState([]);
   const [kivalasztottTermek, setKivalasztottTermek] = useState(null);
   const [betolt, setBetolt] = useState(true);
   const [hiba, setHiba] = useState(null);
+  const [darab, setDarab] = useState(1);
 
-  // Termékek lekérdezése
-  useEffect(() => {  
+  useEffect(() => {
     axios.get("http://localhost:5000/termekek")
       .then((res) => {
-        console.log("Lekérdezett termékek:", res.data);
         setTermekek(res.data);
         setBetolt(false);
       })
-      .catch((error) => {
-        console.error("Hiba a termékek lekérdezésekor:", error);
+      .catch(() => {
         setHiba("Nem sikerült betölteni a termékeket.");
         setBetolt(false);
       });
   }, []);
 
   const reszletek = (termek) => {
-    console.log("Kiválasztott termék:", termek);
     setKivalasztottTermek(termek);
+    setDarab(1);
   };
 
   if (betolt) return <p>Termékek betöltése...</p>;
   if (hiba) return <p>{hiba}</p>;
 
   return (
-    <section id="termekek-szakasz">
+    <section id="termekek-szakasz" className="termekek-container">
       <h2>Elérhető termékek</h2>
       <div className="termek-lista">
         {termekek.length === 0 ? (
@@ -55,24 +53,28 @@ const TermekLista = ({hozzaadKosarhoz }) => {
       {kivalasztottTermek && (
         <div className="modal">
           <div className="modal-tartalom">
-            <span
-              className="modalzaras"
-              onClick={() => setKivalasztottTermek(null)}
-            >
+            <span className="modalzaras" onClick={() => setKivalasztottTermek(null)}>
               &times;
             </span>
             <h2>{kivalasztottTermek.name}</h2>
-            <p>
-              <strong>Ár:</strong> {kivalasztottTermek.price} Ft
-            </p>
-            <p>
-              <strong>Leírás:</strong> {kivalasztottTermek.description}
-            </p>
+            <p><strong>Ár:</strong> {kivalasztottTermek.price} Ft</p>
+            <p><strong>Leírás:</strong> {kivalasztottTermek.description}</p>
+            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+              <button onClick={() => setDarab(Math.max(1, darab - 1))}>-</button>
+              <span>{darab}</span>
+              <button onClick={() => setDarab(darab + 1)}>+</button>
+            </div>
             <button
               onClick={() => {
-                hozzaadKosarhoz(kivalasztottTermek);
-                setKivalasztottTermek(null); // Modal bezárása kosárba helyezés után
+                hozzaadKosarhoz({ ...kivalasztottTermek, db: darab });
+                document.body.classList.add("bedobas-effekt");
+                setTimeout(() => {
+                  document.body.classList.remove("bedobas-effekt");
+                }, 300);
+                setKivalasztottTermek(null);
               }}
+              className="fizetes-gomb"
+              style={{ marginTop: "1rem" }}
             >
               Kosárba teszem
             </button>

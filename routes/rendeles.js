@@ -2,29 +2,24 @@ const express = require("express");
 const router = express.Router();
 const Rendeles = require("../models/rendeles");
 
-// **Rendelés mentése az adatbázisba**
 router.post("/", async (req, res) => {
   try {
     const { felhasznaloId, nev, irsz, varos, utcaHazszam, telefon, email, kosar, fizetesiMod, osszAr, kartyaAdatok } = req.body;
 
-    // Ellenőrizzük, hogy a kosár nem üres-e
     if (!kosar || kosar.length === 0) {
       return res.status(400).json({ message: "A rendeléshez legalább egy termék szükséges." });
     }
 
-    // Ellenőrizzük, hogy minden szükséges adat megvan-e
     if (!nev || !irsz || !varos || !utcaHazszam || !telefon || !email) {
       return res.status(400).json({ message: "Minden szállítási adat megadása kötelező!" });
     }
 
-    // Ellenőrizzük, hogy az összeg nagyobb-e mint 0
     if (osszAr <= 0) {
       return res.status(400).json({ message: "Hibás rendelési összeg!" });
     }
 
-    // Új rendelés létrehozása
     const ujRendeles = new Rendeles({
-      felhasznaloId: felhasznaloId || null, // Ha nincs bejelentkezve, akkor null
+      felhasznaloId: felhasznaloId || null,
       nev,
       irsz,
       varos,
@@ -34,11 +29,10 @@ router.post("/", async (req, res) => {
       kosar,
       fizetesiMod,
       osszAr,
-      kartyaFizetes: fizetesiMod === "bankkártya", // Kártyás fizetés esetén true
+      kartyaFizetes: fizetesiMod === "bankkártya",
       datum: new Date(),
     });
 
-    // Mentés az adatbázisba
     await ujRendeles.save();
     res.status(201).json({ message: "Rendelés sikeresen mentve!", rendeles: ujRendeles });
   } catch (error) {
@@ -56,5 +50,30 @@ router.get("/felhasznalo/:felhasznaloId", async (req, res) => {
     res.status(500).json({ message: "Szerverhiba a rendelések lekérésekor." });
   }
 });
+
+router.put("/:id", async (req, res) => {
+  try {
+    const frissitett = await Rendeles.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+    res.json(frissitett);
+  } catch (err) {
+    console.error("Rendelés státusz frissítése sikertelen:", err);
+    res.status(500).json({ message: "Hiba a rendelés frissítésénél!" });
+  }
+});
+
+router.get("/", async (req, res) => {
+  try {
+    const rendelesek = await Rendeles.find().sort({ datum: -1 });
+    res.json(rendelesek);
+  } catch (err) {
+    console.error("Hiba a rendelések lekérdezésekor:", err);
+    res.status(500).json({ message: "Nem sikerült lekérni a rendeléseket" });
+  }
+});
+
 
 module.exports = router;

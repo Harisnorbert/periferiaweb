@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-//import "./FizetesOldal.css";
 
 const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const [felhasznalo, setFelhasznalo] = useState(null);
@@ -17,13 +16,11 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const [cvc, setCvc] = useState("");
   const navigate = useNavigate();
 
-  // Kosár betöltése
   useEffect(() => {
     const taroltKosar = JSON.parse(localStorage.getItem("kosar")) || [];
     setKosar(taroltKosar);
   }, [setKosar]);
 
-  // Felhasználói adatok betöltése
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -50,6 +47,31 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
     (osszeg, termek) => osszeg + (Number(termek.ar) || Number(termek.price)) * (termek.db || 1),
     0
   );
+  const formatKartyaSzam = (value) => {
+    return value
+      .replace(/\D/g, "") 
+      .slice(0,16)
+      .replace(/(.{4})/g, "$1 ")
+      .trim(); 
+  };
+
+  const formatTelefon = (value) => {
+    return value
+      .replace(/\D/g, "")                              // csak számok
+      .replace(/^36/, "+36 ")                          // magyar hívószám
+      .replace(/^(\+36)(\d{1,2})/, "$1 $2")            // előtag + körzetszám
+      .replace(/^(\+36 \d{1,2})(\d{3})/, "$1 $2")      // 3 szám
+      .replace(/^(\+36 \d{1,2} \d{3})(\d{0,4})/, "$1 $2") // maradék
+      .trim();
+  };
+
+  const formatLejaratiDatum = (value) => {
+    return value
+      .replace(/\D/g, "")                 // csak szám
+      .slice(0, 4)                        // max 4 számjegy
+      .replace(/^(\d{2})(\d{0,2})/, "$1/$2");
+  };
+  const tisztitottKartya = kartyaSzam.replace(/\s/g, "");
 
   const kezelRendelest = async (e) => {
     e.preventDefault();
@@ -64,7 +86,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
         alert("Kérlek, töltsd ki a bankkártya adatokat!");
         return;
       }
-      if (kartyaSzam.length !== 16 || isNaN(kartyaSzam)) {
+      if (tisztitottKartya.length !== 16 || isNaN(tisztitottKartya)) {
         alert("A kártyaszámnak 16 számjegyből kell állnia!");
         return;
       }
@@ -96,13 +118,11 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
           db: termek.db || 1
         })),
         kartyaAdatok: fizetesiMod === "bankkártya" ? {
-          kartyaSzam,
+          kartyaSzam: tisztitottKartya,
           lejaratiDatum,
           cvc
         } : null,
       };
-
-      console.log("Rendelés elküldve:", rendelesAdatok);
 
       await axios.post("http://localhost:5000/rendeles", rendelesAdatok);
       alert(`Rendelés sikeres! Összeg: ${osszAr} Ft`);
@@ -115,47 +135,42 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   };
 
   return (
-    <div className="form-container">
+    <div className="fizetes-container">
       <h2>Fizetés</h2>
 
-      <h3>Rendelés tartalma:</h3>
-      <ul>
-        {kosar.map((termek, index) => (
-          <li key={index}>
-            {termek.nev || termek.name} × {termek.db || 1} –{" "}
-            {(Number(termek.ar) || Number(termek.price)) * (termek.db || 1)} Ft
-          </li>
+      <div className="fizetes-rendeles">
+        {kosar.map((t, i) => (
+          <p key={i}>
+            {t.nev || t.name} × {t.db || 1} – {(t.ar || t.price) * (t.db || 1)} Ft
+          </p>
         ))}
-      </ul>
-        <div className="fizetes-oldal">
-      <form onSubmit={kezelRendelest}>
-        <h3>Szállítási adatok</h3>
-        <label>Teljes név:<input type="text" value={nev} onChange={(e) => setNev(e.target.value)} required /></label>
-        <label>Irányítószám:<input type="text" value={irsz} onChange={(e) => setIrsz(e.target.value)} required /></label>
-        <label>Város:<input type="text" value={varos} onChange={(e) => setVaros(e.target.value)} required /></label>
-        <label>Utca, házszám:<input type="text" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required /></label>
-        <label>Telefonszám:<input type="tel" value={telefon} onChange={(e) => setTelefon(e.target.value)} required /></label>
-        <label>Email:<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></label>
+      </div>
 
-        <label>Fizetési mód:
-          <select value={fizetesiMod} onChange={(e) => setFizetesiMod(e.target.value)}>
-            <option value="utanvet">Utánvét</option>
-            <option value="bankkártya">Bankkártya</option>
-          </select>
-        </label>
+      <form onSubmit={kezelRendelest} className="fizetes-form">
+        <input type="text" placeholder="Teljes név" value={nev} onChange={(e) => setNev(e.target.value)} required />
+        <input type="text" placeholder="Irányítószám" value={irsz} onChange={(e) => setIrsz(e.target.value)} required />
+        <input type="text" placeholder="Város" value={varos} onChange={(e) => setVaros(e.target.value)} required />
+        <input type="text" placeholder="Utca, házszám" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required />
+        <input type="tel" placeholder="Telefonszám" value={telefon} onChange={(e) => setTelefon(formatTelefon(e.target.value))} required/>
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+
+        <select value={fizetesiMod} onChange={(e) => setFizetesiMod(e.target.value)} required>
+          <option value="utanvet">Utánvét</option>
+          <option value="bankkártya">Bankkártya</option>
+        </select>
 
         {fizetesiMod === "bankkártya" && (
           <>
-            <label>Kártyaszám:<input type="text" value={kartyaSzam} onChange={(e) => setKartyaSzam(e.target.value)} required /></label>
-            <label>Lejárati dátum:<input type="text" value={lejaratiDatum} onChange={(e) => setLejaratiDatum(e.target.value)} required /></label>
-            <label>CVC:<input type="text" value={cvc} onChange={(e) => setCvc(e.target.value)} required /></label>
+            <input type="text" placeholder="Kártyaszám" value={kartyaSzam} maxLength={19} onChange={(e) => setKartyaSzam(formatKartyaSzam(e.target.value))} required/>
+            <input type="text" placeholder="Lejárati dátum (MM/YY)" value={lejaratiDatum} onChange={(e) => setLejaratiDatum(formatLejaratiDatum(e.target.value))} maxLength={5} required/>
+            <input type="text" placeholder="CVC" value={cvc} onChange={(e) => setCvc(e.target.value)} required />
           </>
         )}
-
-        <p><strong>Összesen:</strong> {osszAr} Ft</p>
-        <button type="submit">Rendelés leadása</button>
       </form>
-      </div>
+
+      <div className="fizetes-osszeg">Összesen: {osszAr} Ft</div>
+
+      <button className="fizetes-gomb" onClick={kezelRendelest}>Rendelés leadása</button>
     </div>
   );
 };

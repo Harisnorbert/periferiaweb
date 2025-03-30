@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 
-// Felhasználó sémája
+
 const FelhasznaloSchema = new mongoose.Schema(
   {
     nev: {
@@ -27,7 +27,7 @@ const FelhasznaloSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,  // Az email cím egyedinek kell lennie
+      unique: true, 
     },
     jelszo: {
       type: String,
@@ -35,21 +35,24 @@ const FelhasznaloSchema = new mongoose.Schema(
     },
     kosar: {
       type: Array,
-      default: [],  // Alapértelmezett üres kosár
+      default: [],
     },
+    admin:{
+      type: Boolean,
+      default:false,
+    }
   },
-  { timestamps: true }  // Nyomon követhetjük a létrehozás és frissítés időpontját
+  { timestamps: true }
 );
 
 // Mielőtt elmentenénk, a jelszót hash-eljük
 FelhasznaloSchema.pre("save", async function (next) {
   if (this.isModified("jelszo")) {
-    this.jelszo = await bcryptjs.hash(this.jelszo, 10);  // Jelszó hash-elése a bcryptjs segítségével
+    this.jelszo = await bcryptjs.hash(this.jelszo, 10);
   }
   next();
 });
 
-// A Felhasznalo modell létrehozása
 const Felhasznalo = mongoose.model("Felhasznalo", FelhasznaloSchema);
 
 module.exports = Felhasznalo;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-//import "./Bejelentkezes.css";
+
 
 const Bejelentkezes = ({ setFelhasznalo }) => {
   const [email, setEmail] = useState("");
@@ -31,8 +31,8 @@ const Bejelentkezes = ({ setFelhasznalo }) => {
   };
 
   return (
-    <div className="form-container">
-    <form onSubmit={handleSubmit} className="form-container">
+    <div className="auth-form-container">
+    <form onSubmit={handleSubmit} className="auth-form-container">
       <h2>Bejelentkezés</h2>
       <input
         type="email"
@@ -43,7 +43,7 @@ const Bejelentkezes = ({ setFelhasznalo }) => {
         required
       />
 
-      <div className="jelszo-container">
+      <div className="auth-password-toggle">
         <input
           type={jelszoLathato ? "text" : "password"}
           name="jelszo"
@@ -53,7 +53,7 @@ const Bejelentkezes = ({ setFelhasznalo }) => {
           required
         />
         <span onClick={() => setJelszoLathato(!jelszoLathato)} className="jelszo-toggle">
-          {jelszoLathato ? "🙈" : "👁️"}
+          {jelszoLathato ? "Elrejt" : "Mutat"}
         </span>
       </div>
 

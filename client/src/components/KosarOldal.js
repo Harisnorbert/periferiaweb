@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-//import "./KosarOldal.css";
 
 const KosarOldal = ({ kosar, frissitDarab, torlesKosarbol }) => {
   const navigate = useNavigate();
@@ -18,25 +17,24 @@ const KosarOldal = ({ kosar, frissitDarab, torlesKosarbol }) => {
         <p>A kosár üres.</p>
       ) : (
         <>
-          <ul className="kosar-lista">
-            {kosar.map((termek, index) => (
-              <li key={index} className="kosar-item">
-                <div className="kosar-termek-nev">{termek.nev || termek.name}</div>
-                <div className="kosar-muveletek">
-                  <button onClick={() => frissitDarab(index, -1)}>-</button>
-                  <span>{termek.db || 1}</span>
-                  <button onClick={() => frissitDarab(index, 1)}>+</button>
-                </div>
-                <div className="kosar-ar">
-                  {(Number(termek.ar) || Number(termek.price)) * (termek.db || 1)} Ft
-                </div>
-                <button className="torles" onClick={() => torlesKosarbol(index)}>🗑️</button>
-              </li>
-            ))}
-          </ul>
+          {kosar.map((termek, index) => (
+            <div key={index} className="kosar-tetel">
+              <h4>{termek.nev || termek.name}</h4>
 
-          <div className="kosar-osszeg">
-            <strong>Összesen:</strong> {osszAr} Ft
+              <div className="kosar-muveletek">
+                <button onClick={() => frissitDarab(index, -1)}>-</button>
+                <span>{termek.db || 1}</span>
+                <button onClick={() => frissitDarab(index, 1)}>+</button>
+              </div>
+
+              <p>{(Number(termek.ar) || Number(termek.price)) * (termek.db || 1)} Ft</p>
+
+              <button className="torles-gomb" onClick={() => torlesKosarbol(index)}>🗑️</button>
+            </div>
+          ))}
+
+          <div className="kosar-vegosszeg">
+            Összesen: {osszAr} Ft
           </div>
 
           <button className="fizetes-gomb" onClick={() => navigate("/FizetesOldal")}>

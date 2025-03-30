@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-//import "./Regisztracio.css";
+
 
 const Regisztracio = () => {
   const [form, setForm] = useState({
@@ -43,8 +43,8 @@ const Regisztracio = () => {
   const jelszavakEgyeznek = form.jelszo && jelszoUjra && form.jelszo === jelszoUjra;
 
   return (
-    <div className="form-container">
-    <form onSubmit={handleSubmit} className="regisztracio-form">
+    <div className="auth-form-container">
+    <form onSubmit={handleSubmit} className="auth-regisztracio-form">
       <h2>Regisztráció</h2>
 
       <input type="text" name="nev" placeholder="Név" onChange={handleChange} required />
@@ -54,7 +54,7 @@ const Regisztracio = () => {
       <input type="text" name="telefon" placeholder="Telefonszám" onChange={handleChange} required />
       <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
 
-      <div className="jelszo-container">
+      <div className="auth-password-toggle">
         <input
           type={jelszoLathato ? "text" : "password"}
           name="jelszo"
@@ -63,11 +63,11 @@ const Regisztracio = () => {
           required
         />
         <span onClick={() => setJelszoLathato(!jelszoLathato)} className="jelszo-toggle">
-          {jelszoLathato ? "🙈" : "👁️"}
+          {jelszoLathato ? "Elrejt" : "Mutat"}
         </span>
       </div>
 
-      <div className="jelszo-container">
+      <div className="auth-password-toggle">
         <input
           type={jelszoUjraLathato ? "text" : "password"}
           placeholder="Jelszó újra"
@@ -83,7 +83,7 @@ const Regisztracio = () => {
           }
         />
         <span onClick={() => setJelszoUjraLathato(!jelszoUjraLathato)} className="jelszo-toggle">
-          {jelszoUjraLathato ? "Hide" : "Show"}
+          {jelszoUjraLathato ? "Elrejt" : "Mutat"}
         </span>
       </div>
 

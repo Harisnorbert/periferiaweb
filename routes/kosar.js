@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const Felhasznalo = require("../models/felhasznalo");
 const router = express.Router();
 
-// Kosár adatainak lekérése
 router.get("/", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
@@ -25,7 +24,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Kosár frissítése (POST)
 router.post("/", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];

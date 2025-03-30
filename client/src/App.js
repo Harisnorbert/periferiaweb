@@ -8,6 +8,9 @@ import Regisztracio from "./components/Regisztracio";
 import Bejelentkezes from "./components/Bejelentkezes";
 import Profil from "./components/Profil";
 import KosarOldal from "./components/KosarOldal";
+import AdminDashboard from "./components/admin/AdminDashboard";
+import AdminTermekek from "./components/admin/AdminTermekek";
+import AdminRendelesek from "./components/admin/AdminRendelesek";
 
 function App() {
   const [felhasznalo, setFelhasznalo] = useState(JSON.parse(localStorage.getItem("felhasznalo")) || null);
@@ -34,15 +37,17 @@ function App() {
     root.setAttribute("data-theme", newTheme);
   };
 
+
   const hozzaadKosarhoz = (termek) => {
     setKosar((elozoKosar) => {
       const index = elozoKosar.findIndex(t => t.name === termek.name);
+      const darab = termek.db || 1; 
       if (index !== -1) {
         const ujKosar = [...elozoKosar];
-        ujKosar[index].db = (ujKosar[index].db || 1) + 1;
+        ujKosar[index].db = (ujKosar[index].db || 1) + darab;
         return ujKosar;
       } else {
-        return [...elozoKosar, { ...termek, db: 1 }];
+        return [...elozoKosar, { ...termek, db: darab }];
       }
     });
   };
@@ -72,55 +77,104 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-  <div className="nav-container">
-    <h1 onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Periféria Web</h1>
+        <div className="nav-container">
+          <div className="nav-left">
+            <h1 onClick={() => navigate("/")}>Periféria Web</h1>
+            <div className="nav-links">
+              <Link to="/" className="nav-link">Főoldal</Link>
+              <Link to="/kosar" className="nav-link">
+                Kosár ({kosar.length}) - {kosar.reduce((sum, item) => sum + (Number(item.price)*Number(item.db) || 0), 0)} Ft
+              </Link>
+            </div>
+          </div>
 
-    <nav className="navbar">
-      <div className="nav-links">
-        <Link to="/" className="nav-link">Főoldal</Link>
-        <Link to="/kosar" className="nav-link">
-          Kosár ({kosar.length}) - {kosar.reduce((sum, item) => sum + (Number(item.price)*Number(item.db) || 0), 0)} Ft
-        </Link>
-      </div>
+          <div className="nav-right">
+            <div className="theme-switch" onClick={toggleTheme} aria-label="Téma váltása">
+              <span className="icon moon">🌙</span>
+              <span className="icon sun">☀️</span>
+            </div>
 
-      <div className="nav-actions">
-        <button className="theme-toggle" onClick={toggleTheme}>Téma</button>
+            {felhasznalo ? (
+              <div style={{ position: 'relative' }}>
+                <button className="nav-user">
+                <img src={`https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(felhasznalo.nev)}`} alt="avatar" />
+                  Üdv, {felhasznalo.nev}
+                </button>
+                <div className="user-dropdown">
+                    <Link to="/profil">Profil</Link>
+                  {felhasznalo.admin && (
+                    <Link to="/admin">Admin felület</Link>
+                  )}
+                  <button onClick={() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("felhasznalo");
+                    setFelhasznalo(null);
+                    kosarUrites();
+                    navigate("/bejelentkezes");
+                  }}>Kijelentkezés</button>
+                </div>
 
-        {felhasznalo ? (
-          <>
-            <Link to="/profil" className="nav-user">Üdv, {felhasznalo.nev}!</Link>
-            <button className="logout-btn" onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("felhasznalo");
-              setFelhasznalo(null);
-              kosarUrites();
-              navigate("/bejelentkezes");
-            }}>Kijelentkezés</button>
-          </>
-        ) : (
-          <>
-            <Link to="/regisztracio" className="nav-link">Regisztráció</Link>
-            <Link to="/bejelentkezes" className="nav-link">Bejelentkezés</Link>
-          </>
-        )}
-      </div>
-    </nav>
-  </div>
-</header>
+              </div>
+            ) : (
+              <>
+                <Link to="/regisztracio" className="nav-link">Regisztráció</Link>
+                <Link to="/bejelentkezes" className="nav-link">Bejelentkezés</Link>
+              </>
+            )}
+
+            <div className="hamburger" onClick={() => {
+              const menu = document.querySelector(".mobile-nav");
+              menu?.classList.toggle("show");
+            }}>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mobile-nav">
+          <Link to="/" className="nav-link">Főoldal</Link>
+          <Link to="/kosar" className="nav-link">
+            Kosár ({kosar.length}) - {kosar.reduce((sum, item) => sum + (Number(item.price)*Number(item.db) || 0), 0)} Ft
+          </Link>
+          {!felhasznalo ? (
+            <>
+              <Link to="/regisztracio" className="nav-link">Regisztráció</Link>
+              <Link to="/bejelentkezes" className="nav-link">Bejelentkezés</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/profil" className="nav-link">Profil</Link>
+              <button className="nav-link" onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("felhasznalo");
+                setFelhasznalo(null);
+                kosarUrites();
+                navigate("/bejelentkezes");
+              }}>Kijelentkezés</button>
+            </>
+          )}
+        </div>
+      </header>
 
       <main>
         <Routes>
+        <Route path="/admin" element={<AdminDashboard />}>
+        <Route path="termekek" element={<AdminTermekek />} />
+        <Route path="rendelesek" element={<AdminRendelesek />} />
+        </Route>
           <Route path="/kosar" element={<KosarOldal kosar={kosar} frissitDarab={frissitDarab} torlesKosarbol={torlesKosarbol}/>} />
           <Route path="/profil" element={<Profil felhasznalo={felhasznalo} setFelhasznalo={setFelhasznalo} />} />
           <Route path="/regisztracio" element={<Regisztracio />} />
           <Route path="/bejelentkezes" element={<Bejelentkezes setFelhasznalo={setFelhasznalo} />} />
           <Route path="/FizetesOldal" element={<FizetesOldal kosar={kosar} setKosar={setKosar} kosarUrites={kosarUrites} felhasznalo={felhasznalo} />} />
-          <Route path="/" element={<>
-            <div className="container">
+          <Route path="/" element={
+            <div className="main-content">
               <TermekLista hozzaadKosarhoz={hozzaadKosarhoz} />
               <Kosar kosar={kosar} torlesKosarbol={torlesKosarbol} frissitDarab={frissitDarab} />
             </div>
-          </>} />
+          } />
         </Routes>
       </main>
     </div>

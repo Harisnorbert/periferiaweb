@@ -1,14 +1,9 @@
 import React from "react";
-//import "./Kosar.css";
 import { useNavigate } from "react-router-dom";
 
 const Kosar = ({ kosar, frissitDarab, torlesKosarbol }) => {
   const navigate = useNavigate();
-
-  const osszeg = kosar.reduce(
-    (sum, t) => sum + (Number(t.price || 0) * (t.db || 1)),
-    0
-  );
+  const osszeg = kosar.reduce((sum, t) => sum + (Number(t.price || 0) * (t.db || 1)), 0);
 
   return (
     <div className="kosar-panel">
@@ -18,10 +13,10 @@ const Kosar = ({ kosar, frissitDarab, torlesKosarbol }) => {
       ) : (
         <ul>
           {kosar.map((termek, index) => (
-            <li key={index}>
+            <li key={index} className="kosar-item animate">
               <div className="termek-info">
                 <strong>{termek.name}</strong>
-                <p>{termek.price*termek.db} Ft</p>
+                <p>{termek.price * termek.db} Ft</p>
               </div>
               <div className="mennyiseg-kezelo">
                 <button onClick={() => frissitDarab(index, -1)}>-</button>
@@ -33,12 +28,12 @@ const Kosar = ({ kosar, frissitDarab, torlesKosarbol }) => {
           ))}
         </ul>
       )}
-      <p><strong>Összesen:</strong> {osszeg} Ft</p>
-      {kosar.length > 0 && (
-        <button className="fizetes-gomb" onClick={() => navigate("/FizetesOldal")}>
-          Fizetés
-        </button>
-      )}
+      <div className="kosar-osszeg">
+        <p><strong>Összesen:</strong> {osszeg} Ft</p>
+        {kosar.length > 0 && (
+          <button className="fizetes-gomb" onClick={() => navigate("/FizetesOldal")}>Fizetés</button>
+        )}
+      </div>
     </div>
   );
 };

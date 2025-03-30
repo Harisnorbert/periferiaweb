@@ -1,246 +1,843 @@
-/* === PERIFERIA ULTRA THEME — eMAG-szerű, átlátható, reszponzív === */
+/* === Alap színek és téma === */
 :root {
-    --bg-color: #f4f6f8;
-    --text-color: #111;
-    --card-bg: #fff;
-    --accent-color: #2ecc71;
-    --border-color: #dcdcdc;
-    --button-bg: #2ecc71;
-    --button-text: #000;
-  }
-  
-  [data-theme="dark"] {
-    --bg-color: #0e1116;
-    --text-color: #f1f1f1;
-    --card-bg: #181d24;
-    --accent-color: #58ffb0;
-    --border-color: #2a2f38;
-    --button-bg: #58ffb0;
-    --button-text: #0e1116;
-  }
-  
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Rubik', 'Segoe UI', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .container {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    gap: 2rem;
-    align-items: start;
-  }
-  
-  .page-wrapper {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-  
-  h1, h2, h3 {
-    color: var(--accent-color);
-    margin-bottom: 1rem;
-  }
-  
-  
-  /* === Header === */
-  .App-header {
-    background-color: var(--card-bg);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .nav-links,
-.nav-actions {
+  --bg-color: #f4f6f8;
+  --text-color: #111;
+  --card-bg: #fff;
+  --accent-color: #2ecc71;
+  --border-color: #dcdcdc;
+  --button-bg: #2ecc71;
+  --button-text: #000;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0e1116;
+  --text-color: #f1f1f1;
+  --card-bg: #181d24;
+  --accent-color: #58ffb0;
+  --border-color: #2a2f38;
+  --button-bg: #58ffb0;
+  --button-text: #0e1116;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Rubik', 'Segoe UI', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* === Header === */
+.App-header {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2rem;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-left h1 {
+  color: var(--accent-color);
+  margin: 0;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--border-color);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.nav-user-wrapper {
+  position: relative;
+}
+
+.nav-user {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  letter-spacing: 0.3px;
+}
+
+.nav-user img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 3.2rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  z-index: 100;
+  animation: fadeIn 0.2s ease-out;
+  overflow: hidden;
+}
+
+.nav-user-wrapper:hover .user-dropdown,
+.nav-user:focus + .user-dropdown,
+.user-dropdown:hover {
+  display: flex;
+}
+
+.user-dropdown a,
+.user-dropdown button {
+  text-decoration: none;
+  padding: 0.85rem 1.2rem;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+  background-color: var(--border-color);
+  color: var(--accent-color);
+}
+
+.theme-switch {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  background-color: var(--border-color);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.theme-switch::before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: var(--button-bg);
+  border-radius: 50%;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  top: 2px;
+  left: 2px;
+  z-index: 1;
+}
+
+.theme-switch .icon {
+  position: absolute;
+  font-size: 1rem;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Alapértelmezett (light) – ☀️ látszik */
+.theme-switch .icon.sun {
+  opacity: 1;
+  transform: translateX(12px);
+}
+
+.theme-switch .icon.moon {
+  opacity: 0;
+}
+
+/* Dark téma – 🌙 látszik */
+[data-theme="dark"] .theme-switch .icon.sun {
+  opacity: 0;
+  
+}
+
+[data-theme="dark"] .theme-switch .icon.moon {
+  opacity: 1;
+  transform: translateX(-12px);
+}
+
+/* Pötty mozgása dark módban */
+[data-theme="dark"] .theme-switch::before {
+  transform: translateX(24px);
+  background-color: var(--accent-color);
+}
+
+/* === Mobile Menu === */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background-color: var(--text-color);
+  border-radius: 2px;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--card-bg);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 9;
+}
+
+.mobile-nav.show {
+  display: flex;
+}
+
+/* === Termék kártyák === */
+.termek-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.termek-kartya {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.termek-kartya:hover {
+  transform: translateY(-4px);
+}
+.main-content {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 2rem;
+  align-items: start;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* === Kosár panel === */
+.kosar-panel {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
+}
+
+.kosar-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+}
+
+.kosar-muveletek {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kosar-muveletek button {
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.kosar-muveletek span {
+  display: inline-block;
+  min-width: 30px;
+  text-align: center;
+  font-weight: bold;
+  background-color: var(--border-color);
+  color: var(--text-color);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+.lebego-osszeg {
+  position: sticky;
+  bottom: 0;
+  background: var(--card-bg);
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+
+.torles-gomb {
+  background-color: var(--accent-color);
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  border-radius: 6px;
+}
+
+.torles-gomb:hover {
+  background-color: #ff5c5c;
+}
+
+.kosar-osszeg {
+  text-align: right;
+  font-weight: bold;
+  color: var(--accent-color);
+  margin-top: 1rem;
+}
+
+.kosar-oldal {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.kosar-tetel {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--card-bg);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  font-weight:bold;
+  margin:0;
+  color:var(--accent-color);
+}
+
+.kosar-tetel h4 {
+  margin: 0;
+}
+
+.kosar-muveletek {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kosar-muveletek button {
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.kosar-vegosszeg {
+  display: flex;
+  justify-content: flex-end;
+  font-weight: bold;
+  color: var(--accent-color);
+  font-size: 1.1rem;
+}
+
+.fizetes-gomb {
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  padding: 12px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.fizetes-gomb:hover {
+  background-color: #45d98b;
+}
+
+.fizetes-container {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.fizetes-container h2 {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  color: var(--accent-color);
+}
+
+.fizetes-rendeles {
+  background-color: var(--bg-color);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 1rem;
+}
+
+.fizetes-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.fizetes-form input,
+.fizetes-form select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.fizetes-osszeg {
+  font-weight: bold;
+  color: var(--accent-color);
+  text-align: right;
+  font-size: 1.1rem;
+}
+
+.profil-container {
+  max-width: 900px;
+  margin: 3rem auto;
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profil-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
   align-items: center;
 }
 
-.nav-link,
-.nav-user {
+.profil-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
   color: var(--text-color);
-  text-decoration: none;
-  font-weight: 500;
-  padding: 6px 10px;
-  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mentes-gomb {
+  grid-column: -2 / -1;
+  justify-self: end;
+  align-self: end;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
-  
-.nav-link:hover,
-.nav-user:hover {
-  background-color: var(--border-color);
+
+.mentes-gomb:hover {
+  background-color: #45d98b;
 }
-  
-.logout-btn, .fizetes-gomb, button[type="submit"], .theme-toggle {
-    background-color: var(--button-bg);
-    color: var(--button-text);
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease, filter 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+
+.rendeles-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rendeles-doboz {
+  background-color: var(--bg-color);
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.rendeles-doboz ul {
+  margin: 0.5rem 0 0 1rem;
+  padding: 0;
+  list-style-type: disc;
+}
+
+.admin-dashboard {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.admin-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-nav a {
+  padding: 8px 14px;
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.admin-nav a:hover {
+  background-color: #45d98b;
+}
+
+.admin-tartalom {
+  padding: 1rem;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+.admin-termek-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.admin-termek-form input,
+.admin-termek-form textarea,
+.admin-termek-form select {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.admin-termek-form button {
+  grid-column: 1 / -1;
+  justify-self: end;
+  padding: 10px 20px;
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-termek-form button:hover {
+  background-color: #45d98b;
+}
+
+.admin-termek-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.admin-termek-tabla th,
+.admin-termek-tabla td {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  text-align: left;
+}
+
+.admin-termek-tabla th {
+  background-color: var(--card-bg);
+}
+
+.admin-termek-tabla button {
+  padding: 6px 12px;
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.admin-termek-tabla button:hover {
+  background-color: #45d98b;
+}
+.admin-termek-container, .admin-rendelesek-container {
+  background-color: var(--background-color, #f8f8f8);
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 1000px;
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+.admin-termek-form,
+.admin-rendelesek-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-termek-form input,
+.admin-termek-form textarea,
+.admin-rendelesek-filter input,
+.admin-rendelesek-filter select {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  flex: 1 1 200px;
+}
+
+.admin-termek-form button,
+.admin-rendelesek-filter button {
+  background-color: #00c853;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-termek-form button:hover,
+.admin-rendelesek-filter button:hover {
+  background-color: #00b24d;
+}
+
+.admin-termek-tabla,
+.admin-rendelesek-tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-termek-tabla th,
+.admin-termek-tabla td,
+.admin-rendelesek-tabla th,
+.admin-rendelesek-tabla td {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.admin-termek-tabla th,
+.admin-rendelesek-tabla th {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+/*Modal*/
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-tartalom {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.modal-tartalom input,
+.modal-tartalom textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modalzaras {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+}
+.auth-form-container {
+  max-width: 480px;
+  margin: 3rem auto;
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form-container h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  color: var(--accent-color);
+}
+
+.auth-form-container input {
+  width: 100%;
+  padding: 10px 14px 10px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  box-sizing: border-box;
+  display: block;
+  margin-top: 10px;
+
+}
+
+.auth-form-container button {
+  padding: 10px;
+  background-color: var(--accent-color);
+  color: var(--button-text);
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.auth-form-container button:hover {
+  background-color: #45d98b;
+}
+
+.auth-password-toggle {
+  position: relative;
+  width: 100%;
+}
+
+.auth-password-toggle input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.auth-password-toggle .jelszo-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text-color);
+  user-select: none;
+}
+/* === Animációk === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
   }
-  
-  .logout-btn:hover, .fizetes-gomb:hover, .theme-toggle:hover {
-    filter: brightness(0.95);
-    background-color: var(--accent-color);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  /* === Termékek rácsban === */
-  .termek-lista {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .termek-kartya {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .termek-kartya:hover {
-    transform: translateY(-4px);
-  }
-  
-  /* === Kosár oldalra igazítva === */
-  .kosar-panel {
-    background-color: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 2rem;
-    height: fit-content;
-  }
-  
-  .kosar-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 0;
-  }
-  
-  .kosar-muveletek button {
-    background-color: var(--accent-color);
-    color: var(--button-text);
-    border: none;
-    border-radius: 4px;
-    padding: 6px 10px;
-    margin: 0 4px;
-  }
-  
-  .torles-gomb {
-    background: none;
-    border: none;
-    color: #ff5c5c;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  
-  .kosar-osszeg {
-    text-align: right;
-    font-weight: bold;
-    color: var(--accent-color);
-    margin-top: 1rem;
-  }
-  
-  /* === Forms és Profil oldalak === */
-  input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    margin-bottom: 1rem;
-  }
-  
-  input:focus, select:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 5px var(--accent-color);
-  }
-  
-  .form-container, .profil-adatok, .fizetes-oldal {
-    background-color: var(--card-bg);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-    margin-top: 2rem;
-  }
-  
-  /* === Rendelések === */
-  .rendelesek-wrapper {
-    display: grid;
-    gap: 2rem;
-  }
-  
-  .rendeles {
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    background-color: var(--card-bg);
-    padding: 1rem 1.5rem;
-  }
-  
-  .termekek-lista {
-    list-style-type: disc;
-    padding-left: 1.5rem;
-    color: var(--text-color);
-  }
-  
-  .termekek-lista li {
-    margin-bottom: 4px;
-  }
-  
-  /* === Téma váltó gomb === */
-  .theme-toggle {
-    margin-top: 1rem;
-    align-self: flex-end;
-  }
-  
-  /* === Reszponzív === */
-  @media (max-width: 992px) {
-    .container {
-      grid-template-columns: 1fr;
-    }
-  
-    .kosar-panel {
-      position: relative;
-      top: auto;
-      margin-top: 2rem;
-    }
-  }
-  
+}
+
+
+
