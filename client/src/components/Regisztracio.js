@@ -32,7 +32,7 @@ const Regisztracio = () => {
     }
 
     try {
-      const response = await axios.post("${process.env.REACT_APP_API_URL}/felhasznalo/regisztracio", form);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/felhasznalo/regisztracio`, form);
       alert(response.data.message);
       navigate("/bejelentkezes");
     } catch (error) {

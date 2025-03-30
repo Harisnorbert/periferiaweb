@@ -24,7 +24,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      axios.get("http://localhost:5000/felhasznalo", {
+      axios.get(`${process.env.REACT_APP_API_URL}/felhasznalo`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -124,7 +124,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
         } : null,
       };
 
-      await axios.post("${process.env.REACT_APP_API_URL}/rendeles", rendelesAdatok);
+      await axios.post(`${process.env.REACT_APP_API_URL}/rendeles`, rendelesAdatok);
       alert(`Rendelés sikeres! Összeg: ${osszAr} Ft`);
       kosarUrites();
       navigate("/");

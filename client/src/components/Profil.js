@@ -28,7 +28,7 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put("${process.env.REACT_APP_API_URL}/felhasznalo", form, {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/felhasznalo`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
