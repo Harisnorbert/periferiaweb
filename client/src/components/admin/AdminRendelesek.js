@@ -8,7 +8,7 @@ const AdminRendelesek = () => {
 
   const betoltRendelesek = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/rendeles");
+      const res = await axios.get("${process.env.REACT_APP_API_URL}/rendeles");
       setRendelesek(res.data);
     } catch (err) {
       console.error("Hiba a rendelések lekérdezésekor:", err);
@@ -21,7 +21,7 @@ const AdminRendelesek = () => {
 
   const handleStatuszValtozas = async (id, ujStatusz) => {
     try {
-      await axios.put(`http://localhost:5000/rendeles/${id}`, { statusz: ujStatusz });
+      await axios.put(`${process.env.REACT_APP_API_URL}/rendeles/${id}`, { statusz: ujStatusz });
       betoltRendelesek();
     } catch (err) {
       console.error("Hiba a státusz frissítésénél:", err);
