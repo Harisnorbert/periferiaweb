@@ -8,7 +8,7 @@ const AdminRendelesek = () => {
 
   const betoltRendelesek = async () => {
     try {
-      const res = await axios.get("${process.env.REACT_APP_API_URL}/rendeles");
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/rendeles`);
       setRendelesek(res.data);
     } catch (err) {
       console.error("Hiba a rendelések lekérdezésekor:", err);

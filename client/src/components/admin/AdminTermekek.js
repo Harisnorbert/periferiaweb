@@ -18,7 +18,7 @@ const AdminTermekek = () => {
 
   const betoltTermekeket = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/termekek");
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/termekek`);
       setTermekek(res.data);
     } catch (err) {
       console.error("Nem sikerült lekérni a termékeket:", err);
@@ -40,7 +40,7 @@ const AdminTermekek = () => {
         description: termek.leiras || "",
       };
 
-      await axios.post("http://localhost:5000/termekek", kuldoAdat);
+      await axios.post(`${process.env.REACT_APP_API_URL}/termekek`, kuldoAdat);
       alert("Termék sikeresen hozzáadva!");
       setTermek({ nev: "", ar: "", category: "", imageUrl: "", leiras: "" });
       betoltTermekeket();
@@ -67,7 +67,7 @@ const AdminTermekek = () => {
         imageUrl: szerkesztett.imageUrl,
         description: szerkesztett.description,
       };
-      await axios.put(`http://localhost:5000/termekek/${szerkesztett._id}`, frissitett);
+      await axios.put(`${process.env.REACT_APP_API_URL}/termekek/${szerkesztett._id}`, frissitett);
       alert("Termék frissítve");
       setSzerkesztett(null);
       betoltTermekeket();
@@ -80,7 +80,7 @@ const AdminTermekek = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Biztosan törlöd ezt a terméket?")) return;
     try {
-      await axios.delete(`http://localhost:5000/termekek/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/termekek/${id}`);
       alert("Termék törölve");
       betoltTermekeket();
     } catch (err) {
