@@ -28,7 +28,7 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
     console.log("Bejelentkezett felhasználó:", felhasznalo);
 
 
-    axios.get(`${process.env.REACT_APP_API_URL}/felhasznalo/${felhasznalo._id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/rendeles/felhasznalo/${felhasznalo._id}`)
       .then(res => setRendelesek(res.data))
       .catch(err => console.error("Hiba a rendelések lekérésekor:", err));
   }, [felhasznalo, navigate]);
