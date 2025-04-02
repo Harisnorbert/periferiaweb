@@ -15,6 +15,8 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
     }
 
     setForm({ ...felhasznalo, jelszo: "" });
+    console.log("Bejelentkezett felhasználó:", felhasznalo);
+
 
     axios.get(`${process.env.REACT_APP_API_URL}/felhasznalo/${felhasznalo._id}`)
       .then(res => setRendelesek(res.data))
