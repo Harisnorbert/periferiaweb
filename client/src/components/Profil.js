@@ -9,10 +9,20 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!felhasznalo) {
-      navigate("/bejelentkezes");
-      return;
+    if (felhasznalo) {
+      const url = `${process.env.REACT_APP_API_URL}/rendeles/felhasznalo/${felhasznalo._id}`;
+      console.log("Lekérdezett URL:", url);
+  
+      axios.get(url)
+        .then((res) => {
+          console.log("Lekérdezés eredménye:", res.data);
+          setRendelesek(res.data);
+        })
+        .catch((err) => {
+          console.error("Hiba a rendelések lekérésekor:", err);
+        });
     }
+  }, [felhasznalo]);
 
     setForm({ ...felhasznalo, jelszo: "" });
     console.log("Bejelentkezett felhasználó:", felhasznalo);
