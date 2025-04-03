@@ -13,12 +13,12 @@ const Kosar = ({ kosar, frissitDarab, torlesKosarbol }) => {
       ) : (
         <ul>
           {kosar.map((termek, index) => (
-            <li key={index} className="kosar-item animate">
-              <div className="termek-info">
+            <li key={index} className="kosar-item">
+              <div className="kosar-item-felso">
                 <strong>{termek.name}</strong>
-                <p>{termek.price * termek.db} Ft</p>
+                <p className="kosar-ar">{termek.price * termek.db} Ft</p>
               </div>
-              <div className="mennyiseg-kezelo">
+              <div className="kosar-muveletek">
                 <button onClick={() => frissitDarab(index, -1)}>-</button>
                 <span>{termek.db || 1}</span>
                 <button onClick={() => frissitDarab(index, 1)}>+</button>
