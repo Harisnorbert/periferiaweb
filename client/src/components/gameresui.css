@@ -583,7 +583,7 @@ body {
 
 .admin-tartalom {
   padding: 1rem;
-  background-color: var(--bg-color);
+  background-color: var(--background-color);
   border: 1px solid var(--border-color);
   border-radius: 8px;
 }
@@ -603,7 +603,7 @@ body {
   padding: 10px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  background-color: var(--bg-color);
+  background-color: var(--background-color);
   color: var(--text-color);
   font-size: 1rem;
 }
@@ -656,7 +656,7 @@ body {
   background-color: #45d98b;
 }
 .admin-termek-container, .admin-rendelesek-container {
-  background-color: var(--background-color, #f8f8f8);
+  background-color: var(--background-color);
   padding: 2rem;
   border-radius: 1rem;
   max-width: 1000px;
