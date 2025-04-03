@@ -108,6 +108,7 @@ const AdminTermekek = () => {
             <th>Név</th>
             <th>Ár</th>
             <th>Kategória</th>
+            <th>Kép URL</th>
             <th>Műveletek</th>
           </tr>
         </thead>
