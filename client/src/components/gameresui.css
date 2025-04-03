@@ -294,6 +294,7 @@ body {
   position: sticky;
   top: 2rem;
   height: fit-content;
+  width: fit-content;
 }
 
 .kosar-item {
