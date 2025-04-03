@@ -299,7 +299,6 @@ body {
 
 .kosar-item {
   display: flex;
-  justify-content: space-between;
   align-items: left;
   border-bottom: 1px solid var(--border-color);
   padding: 1rem 0;
