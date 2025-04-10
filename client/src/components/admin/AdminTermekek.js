@@ -108,7 +108,8 @@ const AdminTermekek = () => {
             <th>Név</th>
             <th>Ár</th>
             <th>Kategória</th>
-            <th>Kép URL</th>
+            <th>Leírás</th>
+            <th>Kép</th>
             <th>Műveletek</th>
           </tr>
         </thead>
@@ -118,6 +119,8 @@ const AdminTermekek = () => {
               <td>{t.name}</td>
               <td>{t.price} Ft</td>
               <td>{t.category}</td>
+              <td>{t.description}</td>
+              <td>{t.imageUrl}</td>
               <td>
                 <button onClick={() => handleEditClick(t)}>Módosítás</button>
                 <button onClick={() => handleDelete(t._id)} style={{ marginLeft: '0.5rem', backgroundColor: '#ff4d4f' }}>Törlés</button>

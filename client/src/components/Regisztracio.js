@@ -54,7 +54,6 @@ const Regisztracio = () => {
         <input type="number" name="irsz" placeholder="Irányítószám" onChange={handleChange} required />
         <input type="text" name="varos" placeholder="Város" onChange={handleChange} required />
         <input type="text" name="utcaHazszam" placeholder="Utca, házszám" onChange={handleChange} required />
-        <label>Telefonszám:</label>
         <PhoneInput onChange={setFullPhone} />
         <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
 

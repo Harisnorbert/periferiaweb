@@ -52,8 +52,7 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
       <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} className="profil-form">
         <input name="nev" value={form.nev} onChange={handleChange} placeholder="Név" required />
         <input name="email" value={form.email} onChange={handleChange} placeholder="Email" type="email" required />
-        <label>Telefonszám:</label>
-        <PhoneInput onChange={setFullPhone} />
+        <PhoneInput onChange={setFullPhone} value={form.telefon}/>
         <input name="irsz" value={form.irsz} onChange={handleChange} placeholder="Irányítószám" required />
         <input name="varos" value={form.varos} onChange={handleChange} placeholder="Város" required />
         <input name="utcaHazszam" value={form.utcaHazszam} onChange={handleChange} placeholder="Utca, házszám" required />
