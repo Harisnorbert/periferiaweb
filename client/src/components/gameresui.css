@@ -865,7 +865,7 @@ input[type=number] {
 .kategoria-szuro button {
   padding: 0.5rem 1rem;
   background-color: var(--primary-color);
-  color: var(--button-text);
+  color: var(--text-color);
   border: none;
   cursor: pointer;
   border-radius: 8px;
