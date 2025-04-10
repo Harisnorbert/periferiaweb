@@ -6,7 +6,7 @@ const PhoneInput = ({ onChange, defaultCountryCode = "+36", defaultNumber = "" }
   const [telefon, setPhoneNumber] = useState(defaultNumber);
 
   useEffect(() => {
-    onChange(`${countryCode}${phoneNumber}`);
+    onChange(`${countryCode}${telefon}`);
   }, [countryCode, telefon, onChange]);
 
   return (
@@ -24,7 +24,7 @@ const PhoneInput = ({ onChange, defaultCountryCode = "+36", defaultNumber = "" }
 
       <input
         type="text"
-        value={phoneNumber}
+        value={telefon}
         maxLength={9}
         placeholder="Telefonszám"
         onChange={(e) => {
