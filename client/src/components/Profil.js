@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PhoneInput from "./PhoneInput";
 
 const Profil = ({ felhasznalo, setFelhasznalo }) => {
   const [rendelesek, setRendelesek] = useState([]);
   const [form, setForm] = useState(null);
   const [uzenet, setUzenet] = useState("");
+  const [fullPhone, setFullPhone] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,8 +17,6 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
     }
 
     setForm({ ...felhasznalo, jelszo: "" });
-    console.log("Bejelentkezett felhasználó:", felhasznalo);
-
 
     axios.get(`${process.env.REACT_APP_API_URL}/rendeles/felhasznalo/${felhasznalo._id}`)
       .then(res => setRendelesek(res.data))
@@ -30,7 +30,8 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/felhasznalo`, form, {
+      const formData = { ...form, telefon: fullPhone };
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/felhasznalo`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -38,7 +39,6 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
       localStorage.setItem("felhasznalo", JSON.stringify(response.data.felhasznalo));
       setUzenet("Sikeresen frissítve!");
     } catch (error) {
-      console.error(error);
       setUzenet(error.response?.data?.message || "Hiba történt a frissítéskor!");
     }
   };
@@ -52,7 +52,8 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
       <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} className="profil-form">
         <input name="nev" value={form.nev} onChange={handleChange} placeholder="Név" required />
         <input name="email" value={form.email} onChange={handleChange} placeholder="Email" type="email" required />
-        <input name="telefon" value={form.telefon} onChange={handleChange} placeholder="Telefonszám" required />
+        <label>Telefonszám:</label>
+        <PhoneInput onChange={setFullPhone} />
         <input name="irsz" value={form.irsz} onChange={handleChange} placeholder="Irányítószám" required />
         <input name="varos" value={form.varos} onChange={handleChange} placeholder="Város" required />
         <input name="utcaHazszam" value={form.utcaHazszam} onChange={handleChange} placeholder="Utca, házszám" required />

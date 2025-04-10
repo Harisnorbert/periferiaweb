@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import PhoneInput from "./PhoneInput";
 
 const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const [felhasznalo, setFelhasznalo] = useState(null);
@@ -9,6 +10,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
   const [varos, setVaros] = useState("");
   const [utcaHazszam, setUtcaHazszam] = useState("");
   const [telefon, setTelefon] = useState("");
+  const [fullPhone, setFullPhone] = useState("");
   const [email, setEmail] = useState("");
   const [fizetesiMod, setFizetesiMod] = useState("utanvet");
   const [kartyaSzam, setKartyaSzam] = useState("");
@@ -22,11 +24,9 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
       const taroltKosar = tarolt && tarolt !== "undefined" ? JSON.parse(tarolt) : [];
       setKosar(taroltKosar);
     } catch (e) {
-      console.error("Hibás kosáradat a localStorage-ben:", e);
       setKosar([]);
     }
   }, [setKosar]);
-  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -34,19 +34,18 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
       axios.get(`${process.env.REACT_APP_API_URL}/felhasznalo`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
-        if (res.data.felhasznalo) {
-          const user = res.data.felhasznalo;
-          setFelhasznalo(user);
-          setNev(user.nev || "");
-          setIrsz(user.irsz || "");
-          setVaros(user.varos || "");
-          setUtcaHazszam(user.utcaHazszam || "");
-          setTelefon(user.telefon || "");
-          setEmail(user.email || "");
-        }
-      })
-      .catch((err) => console.error("Hiba a felhasználó betöltésekor:", err));
+        .then((res) => {
+          if (res.data.felhasznalo) {
+            const user = res.data.felhasznalo;
+            setFelhasznalo(user);
+            setNev(user.nev || "");
+            setIrsz(user.irsz || "");
+            setVaros(user.varos || "");
+            setUtcaHazszam(user.utcaHazszam || "");
+            setTelefon(user.telefon || "");
+            setEmail(user.email || "");
+          }
+        });
     }
   }, []);
 
@@ -54,21 +53,12 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
     (osszeg, termek) => osszeg + (Number(termek.ar) || Number(termek.price)) * (termek.db || 1),
     0
   );
+
   const formatKartyaSzam = (value) => {
     return value
-      .replace(/\D/g, "") 
-      .slice(0,16)
-      .replace(/(.{4})/g, "$1 ")
-      .trim(); 
-  };
-
-  const formatTelefon = (value) => {
-    return value
       .replace(/\D/g, "")
-      .replace(/^36/, "+36 ")
-      .replace(/^(\+36)(\d{1,2})/, "$1 $2")           
-      .replace(/^(\+36 \d{1,2})(\d{3})/, "$1 $2")
-      .replace(/^(\+36 \d{1,2} \d{3})(\d{0,4})/, "$1 $2")
+      .slice(0, 16)
+      .replace(/(.{4})/g, "$1 ")
       .trim();
   };
 
@@ -78,6 +68,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
       .slice(0, 4)
       .replace(/^(\d{2})(\d{0,2})/, "$1/$2");
   };
+
   const tisztitottKartya = kartyaSzam.replace(/\s/g, "");
 
   const kezelRendelest = async (e) => {
@@ -114,7 +105,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
         irsz,
         varos,
         utcaHazszam,
-        telefon,
+        telefon: fullPhone,
         email,
         fizetesiMod,
         osszAr,
@@ -136,7 +127,6 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
       kosarUrites();
       navigate("/");
     } catch (error) {
-      console.error("Hiba rendeléskor:", error.response?.data || error.message);
       alert("Hiba történt a rendelés során!");
     }
   };
@@ -158,7 +148,8 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
         <input type="number" placeholder="Irányítószám" value={irsz} onChange={(e) => setIrsz(e.target.value)} required />
         <input type="text" placeholder="Város" value={varos} onChange={(e) => setVaros(e.target.value)} required />
         <input type="text" placeholder="Utca, házszám" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required />
-        <input type="tel" placeholder="Telefonszám" value={telefon} onChange={(e) => setTelefon(formatTelefon(e.target.value))} required/>
+        <label>Telefonszám:</label>
+        <PhoneInput onChange={setFullPhone} />
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
         <select value={fizetesiMod} onChange={(e) => setFizetesiMod(e.target.value)} required>
@@ -168,16 +159,14 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
 
         {fizetesiMod === "bankkártya" && (
           <>
-            <input type="text" placeholder="Kártyaszám" value={kartyaSzam} maxLength={19} onChange={(e) => setKartyaSzam(formatKartyaSzam(e.target.value))} required/>
-            <input type="text" placeholder="Lejárati dátum (MM/YY)" value={lejaratiDatum} onChange={(e) => setLejaratiDatum(formatLejaratiDatum(e.target.value))} maxLength={5} required/>
+            <input type="text" placeholder="Kártyaszám" value={kartyaSzam} maxLength={19} onChange={(e) => setKartyaSzam(formatKartyaSzam(e.target.value))} required />
+            <input type="text" placeholder="Lejárati dátum (MM/YY)" value={lejaratiDatum} onChange={(e) => setLejaratiDatum(formatLejaratiDatum(e.target.value))} maxLength={5} required />
             <input type="text" placeholder="CVC" value={cvc} onChange={(e) => setCvc(e.target.value)} required />
           </>
         )}
+        <div className="fizetes-osszeg">Összesen: {osszAr} Ft</div>
+        <button className="fizetes-gomb" type="submit">Rendelés leadása</button>
       </form>
-
-      <div className="fizetes-osszeg">Összesen: {osszAr} Ft</div>
-
-      <button className="fizetes-gomb" onClick={kezelRendelest}>Rendelés leadása</button>
     </div>
   );
 };
