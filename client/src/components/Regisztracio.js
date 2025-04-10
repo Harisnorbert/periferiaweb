@@ -48,7 +48,7 @@ const Regisztracio = () => {
       <h2>Regisztráció</h2>
 
       <input type="text" name="nev" placeholder="Név" onChange={handleChange} required />
-      <input type="text" name="irsz" placeholder="Irányítószám" onChange={handleChange} required />
+      <input type="number" name="irsz" placeholder="Irányítószám" onChange={handleChange} required />
       <input type="text" name="varos" placeholder="Város" onChange={handleChange} required />
       <input type="text" name="utcaHazszam" placeholder="Utca, házszám" onChange={handleChange} required />
       <input type="text" name="telefon" placeholder="Telefonszám" onChange={handleChange} required />

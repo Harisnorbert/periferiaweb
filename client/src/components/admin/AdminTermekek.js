@@ -94,7 +94,7 @@ const AdminTermekek = () => {
       <h3>Új termék hozzáadása</h3>
       <form onSubmit={handleSubmit} className="admin-termek-form">
         <input type="text" name="nev" value={termek.nev || ""} onChange={handleChange} placeholder="Termék neve" required />
-        <input type="text" name="ar" value={termek.ar || ""} onChange={handleChange} placeholder="Ár (Ft)" required />
+        <input type="number" name="ar" value={termek.ar || ""} onChange={handleChange} placeholder="Ár (Ft)" required />
         <input type="text" name="category" value={termek.category || ""} onChange={handleChange} placeholder="Kategória" />
         <input type="text" name="imageUrl" value={termek.imageUrl || ""} onChange={handleChange} placeholder="Kép URL (opcionális)" />
         <textarea name="leiras" value={termek.leiras || ""} onChange={handleChange} placeholder="Termék leírása" rows={3} />

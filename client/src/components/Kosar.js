@@ -15,7 +15,7 @@ const Kosar = ({ kosar, frissitDarab, torlesKosarbol }) => {
           {kosar.map((termek, index) => (
             <li key={index} className="kosar-item">
               <div className="kosar-item-felso">
-                <strong>{termek.name}</strong>
+                <strong>{termek.name} </strong>
                 <p className="kosar-ar"> {termek.price * termek.db} Ft</p>
               </div>
               <div className="kosar-muveletek">

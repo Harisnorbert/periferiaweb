@@ -23,8 +23,8 @@ router.put("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { name, price, description } = req.body;
-    const ujTermek = new Termek({ name, price, description });
+    const { name, price, description, imageUrl, category } = req.body;
+    const ujTermek = new Termek({ name, price, description, imageUrl, category });
     const mentettTermek = await ujTermek.save();
     res.status(201).json(mentettTermek);
   } catch (error) {

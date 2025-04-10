@@ -1,4 +1,3 @@
-/* === Alap színek és téma === */
 :root {
   --bg-color: #f4f6f8;
   --text-color: #111;
@@ -28,7 +27,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* === Header === */
 .App-header {
   background-color: var(--card-bg);
   border-bottom: 1px solid var(--border-color);
@@ -193,7 +191,6 @@ body {
   pointer-events: none;
 }
 
-/* Alapértelmezett (light) – ☀️ látszik */
 .theme-switch .icon.sun {
   opacity: 1;
   transform: translateX(12px);
@@ -203,7 +200,6 @@ body {
   opacity: 0;
 }
 
-/* Dark téma – 🌙 látszik */
 [data-theme="dark"] .theme-switch .icon.sun {
   opacity: 0;
   
@@ -214,13 +210,11 @@ body {
   transform: translateX(-12px);
 }
 
-/* Pötty mozgása dark módban */
 [data-theme="dark"] .theme-switch::before {
   transform: translateX(24px);
   background-color: var(--accent-color);
 }
 
-/* === Mobile Menu === */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -253,7 +247,6 @@ body {
   display: flex;
 }
 
-/* === Termék kártyák === */
 .termek-lista {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -285,7 +278,6 @@ body {
   padding: 0 1rem;
 }
 
-/* === Kosár panel === */
 .kosar-panel {
   background-color: var(--card-bg);
   padding: 1.5rem;
@@ -854,7 +846,7 @@ body {
   color: var(--text-color);
   user-select: none;
 }
-/* === Animációk === */
+
 @keyframes fadeIn {
   from {
     opacity: 0;

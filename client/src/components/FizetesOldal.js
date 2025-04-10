@@ -64,18 +64,18 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
 
   const formatTelefon = (value) => {
     return value
-      .replace(/\D/g, "")                              // csak számok
-      .replace(/^36/, "+36 ")                          // magyar hívószám
-      .replace(/^(\+36)(\d{1,2})/, "$1 $2")            // előtag + körzetszám
-      .replace(/^(\+36 \d{1,2})(\d{3})/, "$1 $2")      // 3 szám
-      .replace(/^(\+36 \d{1,2} \d{3})(\d{0,4})/, "$1 $2") // maradék
+      .replace(/\D/g, "")
+      .replace(/^36/, "+36 ")
+      .replace(/^(\+36)(\d{1,2})/, "$1 $2")           
+      .replace(/^(\+36 \d{1,2})(\d{3})/, "$1 $2")
+      .replace(/^(\+36 \d{1,2} \d{3})(\d{0,4})/, "$1 $2")
       .trim();
   };
 
   const formatLejaratiDatum = (value) => {
     return value
-      .replace(/\D/g, "")                 // csak szám
-      .slice(0, 4)                        // max 4 számjegy
+      .replace(/\D/g, "")
+      .slice(0, 4)
       .replace(/^(\d{2})(\d{0,2})/, "$1/$2");
   };
   const tisztitottKartya = kartyaSzam.replace(/\s/g, "");
@@ -155,7 +155,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
 
       <form onSubmit={kezelRendelest} className="fizetes-form">
         <input type="text" placeholder="Teljes név" value={nev} onChange={(e) => setNev(e.target.value)} required />
-        <input type="text" placeholder="Irányítószám" value={irsz} onChange={(e) => setIrsz(e.target.value)} required />
+        <input type="number" placeholder="Irányítószám" value={irsz} onChange={(e) => setIrsz(e.target.value)} required />
         <input type="text" placeholder="Város" value={varos} onChange={(e) => setVaros(e.target.value)} required />
         <input type="text" placeholder="Utca, házszám" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required />
         <input type="tel" placeholder="Telefonszám" value={telefon} onChange={(e) => setTelefon(formatTelefon(e.target.value))} required/>
