@@ -14,7 +14,7 @@ const Bejelentkezes = ({ setFelhasznalo }) => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/felhasznalo/bejelentkezes`, { email, jelszo });
 
-      console.log("Bejelentkezés sikeres:", response.data);
+      console.log("Bejelentkezés sikeres");
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("felhasznalo", JSON.stringify(response.data.felhasznalo));
