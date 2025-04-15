@@ -890,7 +890,7 @@ select {
   border-radius: 8px;
   padding: 10px;
   font-size: 1rem;
-  width: 100%;
+  width: 20%;
   box-sizing: border-box;
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease;
@@ -898,7 +898,7 @@ select {
 
 select:focus {
   outline: none;
-  border-color: var(--accent-color);
+  border-color: var(--border-color);
   box-shadow: 0 0 0 2px var(--accent-color);
 }
 
