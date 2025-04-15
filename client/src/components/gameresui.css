@@ -883,7 +883,7 @@ input[type=number] {
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-select {
+.telefon {
   background-color: var(--bg-color);
   color: var(--text-color);
   border: 1px solid var(--border-color);
