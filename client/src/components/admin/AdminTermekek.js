@@ -120,7 +120,7 @@ const AdminTermekek = () => {
               <td>{t.price} Ft</td>
               <td>{t.category}</td>
               <td>{t.description}</td>
-              <td>{t.imageUrl}</td>
+              <td><img src={t.imageUrl} alt="Termék képe" style="max-width: 100px;"/></td>
               <td>
                 <button onClick={() => handleEditClick(t)}>Módosítás</button>
                 <button onClick={() => handleDelete(t._id)} style={{ marginLeft: '0.5rem', backgroundColor: '#ff4d4f' }}>Törlés</button>

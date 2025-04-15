@@ -1,4 +1,4 @@
-// components/PhoneInput.js
+
 import React, { useState, useEffect } from "react";
 
 const PhoneInput = ({ onChange, defaultCountryCode = "+36", defaultNumber = "" }) => {
