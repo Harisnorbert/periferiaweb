@@ -895,6 +895,9 @@ input[type=number] {
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
+.fizetestelefon{
+  max-width:20%
+}
 
 select:focus {
   outline: none;
