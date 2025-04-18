@@ -148,7 +148,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
         <input type="number" placeholder="Irányítószám" value={irsz} onChange={(e) => setIrsz(e.target.value)} required />
         <input type="text" placeholder="Város" value={varos} onChange={(e) => setVaros(e.target.value)} required />
         <input type="text" placeholder="Utca, házszám" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required />
-        <PhoneInput onChange={setFullPhone} value={form.telefon}/>
+        <PhoneInput onChange={setFullPhone} value={telefon}/>
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
         <select value={fizetesiMod} onChange={(e) => setFizetesiMod(e.target.value)} required>
