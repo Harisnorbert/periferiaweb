@@ -15,7 +15,7 @@ const PhoneInput = ({ onChange, defaultCountryCode = "+36", defaultNumber = "" }
         class="telefon"
         value={countryCode}
         onChange={(e) => setCountryCode(e.target.value)}
-        style={{ padding: "4px" }}
+        style={{ padding: "4px", maxWidth:"20%" }}
       >
         <option value="+36">+36 (HU)</option>
         <option value="+44">+44 (UK)</option>
