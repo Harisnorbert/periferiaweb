@@ -270,7 +270,7 @@ body {
 }
 .main-content {
   display: grid;
-  grid-template-columns: 2fr 1.2fr;
+  grid-template-columns: 3fr 1fr;
   gap: 2rem;
   align-items: start;
   max-width: 100%;
