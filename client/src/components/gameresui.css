@@ -273,7 +273,7 @@ body {
   grid-template-columns: 2fr 1.2fr;
   gap: 2rem;
   align-items: start;
-  max-width: 70%;
+  max-width: 100%;
   margin: 2rem auto;
   padding: 0 1rem;
 }
