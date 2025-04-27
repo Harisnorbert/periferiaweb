@@ -249,7 +249,7 @@ body {
 
 .termek-lista {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
@@ -273,7 +273,7 @@ body {
   grid-template-columns: 2fr 1.2fr;
   gap: 2rem;
   align-items: start;
-  max-width: 1200px;
+  max-width: 70%;
   margin: 2rem auto;
   padding: 0 1rem;
 }
