@@ -79,6 +79,11 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
       return;
     }
 
+    if (!fullPhone) {
+      alert("Kérlek add meg a telefonszámodat!");
+      return;
+    }
+
     if (fizetesiMod === "bankkártya") {
       if (!kartyaSzam || !lejaratiDatum || !cvc) {
         alert("Kérlek, töltsd ki a bankkártya adatokat!");
@@ -145,7 +150,7 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
 
       <form onSubmit={kezelRendelest} className="fizetes-form">
         <input type="text" placeholder="Teljes név" value={nev} onChange={(e) => setNev(e.target.value)} required />
-        <input type="number" placeholder="Irányítószám" value={irsz} onChange={(e) => setIrsz(e.target.value)} required />
+        <input type="text" placeholder="Irányítószám" value={irsz} onChange={(e) => {const value = e.target.value.replace(/\D/g, '').slice(0, 4); setIrsz(value);}} required/>
         <input type="text" placeholder="Város" value={varos} onChange={(e) => setVaros(e.target.value)} required />
         <input type="text" placeholder="Utca, házszám" value={utcaHazszam} onChange={(e) => setUtcaHazszam(e.target.value)} required />
         <PhoneInput onChange={setFullPhone} class="fizetestelefon"/>
@@ -163,8 +168,10 @@ const FizetesOldal = ({ kosar, setKosar, kosarUrites }) => {
             <input type="text" placeholder="CVC" value={cvc} onChange={(e) => setCvc(e.target.value)} required />
           </>
         )}
-        <div className="fizetes-osszeg">Összesen: {osszAr} Ft</div>
-        <button className="fizetes-gomb" type="submit">Rendelés leadása</button>
+        <div className="fizetes-also-sor">
+          <div className="fizetes-osszeg">Összesen: {osszAr} Ft</div>
+          <button className="fizetes-gomb" type="submit">Rendelés leadása</button>
+        </div>
       </form>
     </div>
   );

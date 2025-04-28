@@ -465,15 +465,28 @@ body {
   font-size: 1.1rem;
 }
 
+.fizetes-also-sor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.fizetes-osszeg {
+  font-weight: bold;
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
 .fizetes-gomb {
   background-color: var(--accent-color);
   color: var(--button-text);
-  padding: 12px;
+  padding: 12px 24px;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  width: 100%;
   transition: background-color 0.2s ease;
 }
 
