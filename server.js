@@ -37,7 +37,6 @@ app.use("/felhasznalo", felhasznaloRoutes);
 app.use("/termekek", termekRoutes);
 app.use("/rendeles", rendelesRoutes);
 
-
 app.use(express.static(path.join(__dirname, "public")));
 
 mongoose

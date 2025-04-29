@@ -53,7 +53,7 @@ const TermekLista = ({ hozzaadKosarhoz }) => {
 
       <div className="kategoria-szuro">
         <button onClick={() => setSzuroLathato(!szuroLathato)}>
-          Kategória szűrő ▾
+          Kategória szűrő
         </button>
         {szuroLathato && (
           <div className="kategoria-legordulo">
@@ -82,6 +82,13 @@ const TermekLista = ({ hozzaadKosarhoz }) => {
               onClick={() => reszletek(termek)}
             >
               <h3>{termek.name}</h3>
+              {termek.imageUrl && (
+              <img
+                src={termek.imageUrl}
+                alt={termek.name}
+                className="termek-kartya-kep"
+              />
+              )}
               <p>Ár: {termek.price} Ft</p>
               <p>{termek.description}</p>
             </div>
@@ -96,6 +103,13 @@ const TermekLista = ({ hozzaadKosarhoz }) => {
               &times;
             </span>
             <h2>{kivalasztottTermek.name}</h2>
+            { kivalasztottTermek.imageUrl && (
+              <img
+                src={kivalasztottTermek.imageUrl}
+                alt={kivalasztottTermek.name}
+                className="modal-kep"
+              />
+            )}
             <p><strong>Ár:</strong> {kivalasztottTermek.price} Ft</p>
             <p><strong>Leírás:</strong> {kivalasztottTermek.description}</p>
             <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>

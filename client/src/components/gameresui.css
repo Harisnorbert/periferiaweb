@@ -268,6 +268,24 @@ body {
 .termek-kartya:hover {
   transform: translateY(-4px);
 }
+
+.termek-kartya-kep {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.modal-kep {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
 .main-content {
   display: grid;
   grid-template-columns: 3.2fr 0.8fr;
@@ -678,6 +696,22 @@ body {
   max-width: 1000px;
   margin: auto;
   box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+.trend-kartya {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.trend-kartya h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  color: var(--accent-color);
 }
 
 .admin-termek-form,

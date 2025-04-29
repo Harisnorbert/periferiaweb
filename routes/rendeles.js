@@ -51,6 +51,27 @@ router.get("/felhasznalo/:felhasznaloId", async (req, res) => {
   }
 });
 
+router.get("/trend", async (req, res) => {
+  try {
+    const stat = await Rendeles.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$datum" }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    res.json(stat);
+  } catch (err) {
+    console.error("Hiba a rendelési statisztika lekérdezésekor:", err);
+    res.status(500).json({ message: "Szerverhiba a statisztika lekérésénél" });
+  }
+});
+
 router.put("/:id", async (req, res) => {
   try {
     const frissitett = await Rendeles.findByIdAndUpdate(

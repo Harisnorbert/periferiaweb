@@ -36,6 +36,9 @@ const Rendelesek = ({ felhasznalo }) => {
                   <strong>Fizetési mód:</strong> {rendeles.fizetesiMod}
                 </p>
                 <p>
+                  <strong>Státusz:</strong> {rendeles.statusz}
+                </p>
+                <p>
                   <strong>Termékek:</strong>
                 </p>
                 <ul className="termekek-lista">

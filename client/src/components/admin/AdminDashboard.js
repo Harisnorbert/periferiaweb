@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import RendelesChart from "RendelesChart";
 
 const AdminDashboard = () => {
   return (
@@ -10,9 +11,8 @@ const AdminDashboard = () => {
         <Link to="/admin/termekek">Termékek kezelése</Link>
         <Link to="/admin/rendelesek">Rendelések</Link>
       </nav>
-
       <div className="admin-tartalom">
-        <Outlet />
+        <RendelesChart />
       </div>
     </div>
   );
