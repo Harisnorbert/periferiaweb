@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import RendelesChart from "RendelesChart";
+import RendelesChart from "./RendelesChart";
 
 const AdminDashboard = () => {
   return (
