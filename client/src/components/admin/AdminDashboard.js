@@ -13,6 +13,7 @@ const AdminDashboard = () => {
       </nav>
       <div className="admin-tartalom">
         <RendelesChart />
+        <Outlet />
       </div>
     </div>
   );
