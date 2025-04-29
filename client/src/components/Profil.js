@@ -17,6 +17,7 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
     }
 
     setForm({ ...felhasznalo, jelszo: "" });
+    setFullPhone(felhasznalo.telefon || "");
 
     axios.get(`${process.env.REACT_APP_API_URL}/rendeles/felhasznalo/${felhasznalo._id}`)
       .then(res => setRendelesek(res.data))
