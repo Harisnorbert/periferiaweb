@@ -304,7 +304,7 @@ body {
   position: sticky;
   top: 2rem;
   height: fit-content;
-  width: fit-content;
+  width: 250px;
 }
 
 .kosar-item {
@@ -317,10 +317,33 @@ body {
 
 .kosar-item-felso {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.kosar-item-name-price {
+  display: flex;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
   flex-wrap: wrap;
-  padding: 1rem 0;
+}
+
+.kosar-item-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--text-color);
+  word-break: break-word; /* ha nagyon hosszú, törjön meg szótöréssel */
+  flex: 1 1 auto;
+}
+
+.kosar-item-price {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-left: 1rem;
+  white-space: nowrap;
 }
 
 .kosar-item-felso p {
@@ -332,9 +355,19 @@ body {
 
 .kosar-muveletek {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  gap: 0.4rem;
-  flex-wrap: nowrap;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.kosar-muveletek-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5rem;
 }
 
 .kosar-muveletek button {
@@ -367,6 +400,7 @@ body {
 .kosar-ar {
   font-size: 0.95rem;
   color: var(--text-color);
+  padding:1rem;
 }
 .lebego-osszeg {
   position: sticky;
@@ -449,15 +483,28 @@ body {
   font-size: 1.1rem;
 }
 
+.fizetes-also-sor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.fizetes-osszeg {
+  font-weight: bold;
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
 .fizetes-gomb {
   background-color: var(--accent-color);
   color: var(--button-text);
-  padding: 12px;
+  padding: 12px 24px;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  width: 100%;
   transition: background-color 0.2s ease;
 }
 
