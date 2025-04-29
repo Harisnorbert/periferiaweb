@@ -16,7 +16,7 @@ const RendelesChart = () => {
   useEffect(() => {
     const fetchRendelesData = async () => {
       try {
-        const response = await axios.get("/rendeles/trend");
+        const response = await axios.get("https://periferiaweb.onrender.com/rendeles/trend");
         const formatted = response.data.map(item => ({
           date: item._id,
           orders: item.count,
