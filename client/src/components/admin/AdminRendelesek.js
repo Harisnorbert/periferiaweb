@@ -66,7 +66,6 @@ const AdminRendelesek = () => {
             <th>Összeg</th>
             <th>Státusz</th>
             <th>Termékek</th>
-            <th>Művelet</th>
           </tr>
         </thead>
         <tbody>
@@ -90,9 +89,6 @@ const AdminRendelesek = () => {
                     <li key={i}>{t.nev} × {t.db} – {t.ar} Ft</li>
                   ))}
                 </ul>
-              </td>
-              <td>
-                <button onClick={() => alert(JSON.stringify(r, null, 2))}>Részletek</button>
               </td>
             </tr>
           ))}
