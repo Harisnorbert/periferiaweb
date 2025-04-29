@@ -71,6 +71,7 @@ const Profil = ({ felhasznalo, setFelhasznalo }) => {
             <div key={index} className="rendeles-doboz">
               <p><strong>Dátum:</strong> {new Date(rendeles.datum).toLocaleDateString()}</p>
               <p><strong>Összeg:</strong> {rendeles.osszAr} Ft</p>
+              <p><strong>Státusz:</strong> {rendeles.statusz}</p>
               <p><strong>Fizetési mód:</strong> {rendeles.fizetesiMod === "utanvet" ? "Utánvét" : "Bankkártya"}</p>
               <ul>
                 {rendeles.kosar.map((termek, i) => (
